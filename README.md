@@ -1,16 +1,16 @@
 # CS 100 Programming Project
 
-#Project Information
+# Project Information
 Fall 2019
 Richard Duong
 Gregory Shar 862087118
 
-#Introduction
+# Introduction
 
-#Diagram
+# Diagram
 
-#Classes
+# Classes
 
-#Protoypes/Research
+# Protoypes/Research
 
-#Development and Testing Roadmap
+# Development and Testing Roadmap
