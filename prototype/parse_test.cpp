@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
+#include <cstring>
 using namespace std;
+
 
 int main(){
 	char* test1 = "ls -all";
@@ -66,14 +68,35 @@ char* checkQuotes(const char* phrase){
 }
 
 
-
-
 void parseDisplay(const char* phrase){
-	
+
+	vector<char*> commands, connectors;
+
+	char* temp = NULL;
 
 	for(int i = 0; phrase[i] != "\0"; ++i){
-				
-	}
+		if(checkSpace(phrase + i) != NULL){
 
+		}		
+		else if(checkSemiColon(phrase + i) != NULL){
+
+		}
+		else if(checkAnd(phrase + i) != NULL){
+
+		}
+		else if(checkOr(phrase + i) != NULL){
+
+		}
+		else {
+			temp = checkQuotes(phrase + i);	
+			if(temp != NULL){
+				int length = temp - phrase - i;								
+				char* hold = NULL;
+				strncpy(phrase + i, temp,
+				
+			}
+		}
+
+	}
 }
 
