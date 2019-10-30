@@ -23,23 +23,33 @@ void deleteVectorCstrings(vector<char*> v);
 void parseToVectors(char* phrase);
 
 
+const int NUM_TESTS = 11;
 
 int main()
 {
-	char* test1 = "ls -all\0";
-	char* test2 = "echo \"hello world\"";
-	char* test3 = "echo hello && goodbye";
-	char* test4 = "echo \"hello && goodbye\"";
-	char* test5 = "ls;";
-	char* test6 = "ls -a; echo hello && mkdir test || echo world; git status;";
-	char* test7 = "cd";
-	char* test8 = "";
-	char* test9 = "ls    -a   ;";
-	char* test10 = ";&&echo \'hello\';";
-	char* test11 = ";||echo \'not home\'||echo \'is home\'";
+	
+	char* test[NUM_TESTS];
+
+	test[0] = "ls -all\0";
+	test[1] = "echo \"hello world\"";
+	test[2] = "echo hello && goodbye";
+	test[3] = "echo \"hello && goodbye\"";
+	test[4] = "ls;";
+	test[5] = "ls -a; echo hello && mkdir test || echo world; git status;";
+	test[6] = "cd";
+	test[7]	= "";
+	test[8] = "ls    -a   ;";
+	test[9] = ";&&echo \'hello\';";
+	test[10] = ";||echo \'not home\'||echo \'is home\'";
 
 
-	parseToVectors(test1);
+
+	for(int i = 0; i < NUM_TESTS; ++i){
+		cout << "Test " << i << " => " << test[i] << endl;
+		parseToVectors(test[i]);
+		cout << "====================================" << endl << endl;
+	}
+
 
 
 }
@@ -85,16 +95,17 @@ char* checkAnd(char* phrase)
 // Returns current pointer if it's an or
 char* checkOr(char* phrase)
 {
-	if(phrase[0] != '|' && phrase[1] != '|')
+	if(phrase[0] == '|' && phrase[1] == '|')
 	{
-		return NULL;
+		return phrase;
 	}	
 
 	// Just one pipe throws an error
 	else if(phrase[0] == '|'){
+		cout << "Single Pipe Error!" << endl;
 		exit(1);
 	}
-	return phrase;
+	return NULL;
 }
 
 // Returns current pointer if it's a quotation
@@ -109,7 +120,6 @@ char* checkQuotes(char* phrase)
 /*******************************
  *SPECIAL HELPER FUNCTIONS
  *******************************/
-
 
 // Returns the end of the quotation or exits on error with no closing quote
 int sizeQuote(char* phrase)
@@ -128,7 +138,7 @@ int sizeQuote(char* phrase)
 // Finds the size of the command
 int sizeCmd(char* phrase)
 {
-	cout << "Inside sizeCmd" << endl;
+	// cout << "Inside sizeCmd" << endl;
 	int i = 0;
 	while(phrase[i] != '\0')
 	{
@@ -150,12 +160,8 @@ int sizeCmd(char* phrase)
 // Dynamically allocates a new cstring to copy over data
 char* newStrCpy(char* phrase, int size)
 {
-	cout << "Inside newStrCpy" << endl;
 	char* new_copy = new char[size + 1];	// plus nullspace
-	cout << "before strncpy";
-	strncpy(phrase, new_copy, size);
-	cout << "post strncpy";
-
+	strncpy(new_copy, phrase, size);
 	new_copy[size] = '\0';
 	return new_copy;
 }
@@ -196,30 +202,32 @@ void parseToVectors(char* phrase)
 
 
 	while(phrase[i] != '\0'){
-		cout << phrase[i];
-
+		// cout << endl << "character: " << phrase[i] << endl;
 		// If a semicolon ;
 		if(checkSemicolon(phrase + i) != NULL){
-			cout << "SEMICOLON" << endl;
-			strncpy(phrase + i, hold, 1);
+			// cout << "SEMICOLON" << endl;
+			length = 1;
+			hold = newStrCpy(phrase + i, length);
 			connectors.push_back(hold);
-			++i;
+			i += length;
 		}
 
 		// If an AND ampersand &&
 		else if(checkAnd(phrase + i) != NULL){
-			cout << "AND" << endl;
-			strncpy(phrase + i, hold, 2);
+			// cout << "AND" << endl;
+			length = 2;
+			hold = newStrCpy(phrase + i, length);
 			connectors.push_back(hold);
-			i+=2;
+			i+=length;
 		}
 
 		// If an OR pipe ||
 		else if(checkOr(phrase + i) != NULL){
-			cout << "OR" << endl;
-			strncpy(phrase + i, hold, 2);
+			// cout << "OR" << endl;
+			length = 2;
+			hold = newStrCpy(phrase + i, length);
 			connectors.push_back(hold);
-			i+=2;
+			i += length ;
 		}
 
 
@@ -228,7 +236,7 @@ void parseToVectors(char* phrase)
 		
 		// If has double quotation marks \"
 		else if(checkQuotes(phrase + i) != NULL){
-			cout << "Quotes" << endl;
+			// cout << "Quotes" << endl;
 			int length = sizeQuote(phrase + i);
 			hold = newStrCpy(phrase + i, length);
 			commands.push_back(hold);
@@ -237,27 +245,24 @@ void parseToVectors(char* phrase)
 		
 		// If a space (commands & connectors ignore all whitespace)
 		else if(checkSpace(phrase + i) != NULL){
-			cout << "Space" << endl;
+			// cout << "Space" << endl;
 			++i;
 		}
 	
 		// If a command or argument
 		else{
-			cout << "Command" << endl;
+			// cout << "Command" << endl;
 			int length = sizeCmd(phrase + i);
-			cout << "Post-length" << endl;
 			hold = newStrCpy(phrase + i, length);
-			cout << "strncpy" << endl;
 			commands.push_back(hold);
-			cout << "push onto vector" << endl;
 			i += length;
 		}		
 	}
 
-	cout << endl << "Commands" << endl;
+	cout << endl << "Commands:" << endl << "-----" << endl;
 	printVector(commands);
 
-	cout << endl << "Connectors" << endl;
+	cout << endl << "Connectors:" << endl << "-----" << endl;
 	printVector(connectors);
 }
 
