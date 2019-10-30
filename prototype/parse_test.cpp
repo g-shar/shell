@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <vector>
 #include <cstring>
 using namespace std;
 
@@ -13,72 +14,108 @@ int main(){
 	char* test6 = "ls -a; echo hello && mkdir test || echo world; git status;";
 	char* test7 = "cd";
 	char* test8 = "";
+	char* test9 = "ls    -a   ;";
+	char* test10 = ";&&echo \'hello\';";
+	char* test11 = ";||echo \'not home\'||echo \'is home\'";
 
 }
 
-char* checkSpace(const char* phrase){
-	if(*phrase != " ")
+
+/*************************
+ * CHECK FUNCTIONS
+ *************************/
+
+char* checkSpace(char* phrase){
+	if(*phrase == ' ')
 	{
-		return NULL;
+		return phrase;
 	}
-	return phrase;
+	return NULL;
 }
 
-char* checkSemicolon(const char* phrase){
-	if(*phrase != ";")
+char* checkSemicolon(char* phrase){
+	if(*phrase == ';')
 	{
-		return NULL;
+		return phrase;
 	}
-	return phrase;
+	return NULL;
 }
 
-char* checkAnd(const char* phrase){
-	if(phrase[0] != "&" && phrase[1] != "&")
+char* checkAnd(char* phrase){
+	if(phrase[0] == '&' && phrase[1] == '&')
 	{
-		return NULL;
+		return phrase;
 	}
-
-	// skips forward?
-	return phrase + 1;
-}
-
-char* checkOr(const char* phrase){
-	if(phrase[0] != "|" && phrase[1] != "|")
-	{
-		return NULL;
-	}	
-	return phrase + 1;
-}
-
-char* checkQuotes(const char* phrase){
-	if(phrase[0] == "\"")
-	{
-		for(int i = 1; phrase[i] != "\0"; ++i){
-			if(phrase[i] == "\"")
-			{
-				return phrase + i;
-			}
-		}
-		
-		//	error from unfinished quote
+	
+	// Just one ampersand throws an error
+	else if(phrase[0] == '&'){
 		exit(1);
 	}
 
 	return NULL;
 }
 
+// Returns current pointer if it's an or
+char* checkOr(char* phrase){
+	if(phrase[0] != '|' && phrase[1] != '|')
+	{
+		return NULL;
+	}	
 
-void parseDisplay(const char* phrase){
+	// Just one pipe throws an error
+	else if(phrase[0] == '|'){
+		exit(1);
+	}
+	return phrase;
+}
+
+// Returns current pointer if it's a quotation
+char* checkQuotes(char* phrase){
+	if(phrase[0] != '\"'){
+		return NULL;
+	}
+	return phrase;
+}
+
+/*******************************
+ *SPECIAL HELPER FUNCTIONS
+ *******************************/
+
+
+int findSpecialCharacter(char* phrase){
+	int i = 0;
+	while(
+
+
+}
+
+
+// Returns the end of the quotation or exits on error with no closing quote
+char* findEndQuote(char* phrase){
+	for(int i = 1; phrase[i] != '\0'; ++i){
+		if(phrase[i] == '\"')
+		{
+			return phrase + i;
+		}
+	}
+		
+	//	error from unfinished quote
+	exit(1);
+	return NULL;
+}
+
+
+void parseDisplay(char* phrase){
 
 	vector<char*> commands, connectors;
 
 	char* temp = NULL;
 
-	for(int i = 0; phrase[i] != "\0"; ++i){
+	for(int i = 0; phrase[i] != '\0'; ++i){
 		if(checkSpace(phrase + i) != NULL){
 
 		}		
-		else if(checkSemiColon(phrase + i) != NULL){
+		else if(checkSemicolon(phrase + i) != NULL){
 
 		}
 		else if(checkAnd(phrase + i) != NULL){
@@ -90,13 +127,36 @@ void parseDisplay(const char* phrase){
 		else {
 			temp = checkQuotes(phrase + i);	
 			if(temp != NULL){
-				int length = temp - phrase - i;								
+				int length = temp - phrase - i;				
 				char* hold = NULL;
-				strncpy(phrase + i, temp,
-				
+				strncpy(phrase + i, hold, length);
+				commands.push_back(hold);
 			}
 		}
 
 	}
 }
 
+
+
+/***********************************************
+ * Parsing method notes:
+ *	
+ *	Check functions:
+ *	- Just checks current location to see if special character exists
+ *
+ *
+ *	Special Helper Functions:
+ *	- Only applies to a few weird situations:
+ *		=> Quotation marks!
+ *		=> Finding starts & ends of command & argument elements
+ *
+ *
+ *
+ *
+ *
+ * Issues:
+ *
+ *
+ *
+ ************************************************/
