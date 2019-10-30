@@ -4,9 +4,17 @@
 #include <cstring>
 using namespace std;
 
+char* checkSpace(char* phrase);
+char* checkSemicolon(char* phrase);
+char* checkAnd(char* phrase);
+char* checkOr(char* phrase);
+char* checkQuotes(char* phrase);
+char* findEndQuote(char* phrase);
+void parseToVectors(char* phrase);
+void printVector(vector<char*> v);
 
 int main(){
-	char* test1 = "ls -all";
+	char* test1 = "ls -all\0";
 	char* test2 = "echo \"hello world\"";
 	char* test3 = "echo hello && goodbye";
 	char* test4 = "echo \"hello && goodbye\"";
@@ -17,6 +25,10 @@ int main(){
 	char* test9 = "ls    -a   ;";
 	char* test10 = ";&&echo \'hello\';";
 	char* test11 = ";||echo \'not home\'||echo \'is home\'";
+
+
+	parseToVectors(test1);
+
 
 }
 
@@ -82,14 +94,6 @@ char* checkQuotes(char* phrase){
  *******************************/
 
 
-int findSpecialCharacter(char* phrase){
-	int i = 0;
-	while(
-
-
-}
-
-
 // Returns the end of the quotation or exits on error with no closing quote
 char* findEndQuote(char* phrase){
 	for(int i = 1; phrase[i] != '\0'; ++i){
@@ -105,35 +109,58 @@ char* findEndQuote(char* phrase){
 }
 
 
-void parseDisplay(char* phrase){
+void parseToVectors(char* phrase){
 
 	vector<char*> commands, connectors;
 
 	char* temp = NULL;
+	char* hold = NULL;
+	int i = 0;
 
-	for(int i = 0; phrase[i] != '\0'; ++i){
-		if(checkSpace(phrase + i) != NULL){
+	while(phrase[i] != '\0'){
+		cout << phrase[i];
 
-		}		
+		temp = checkQuotes(phrase + i);
+		if(temp != NULL){
+			//	distance from 2 pointers
+			int length = temp - phrase - i;							 strncpy(phrase + i, hold, length);
+			commands.push_back(hold);
+		}
+
 		else if(checkSemicolon(phrase + i) != NULL){
-
+			strncpy(phrase + i, hold, 1);
+			connectors.push_back(hold);
 		}
 		else if(checkAnd(phrase + i) != NULL){
-
+			strncpy(phrase + i, hold, 2);
+			connectors.push_back(hold);
 		}
 		else if(checkOr(phrase + i) != NULL){
+			strncpy(phrase + i, hold, 2);
+			connectors.push_back(hold);
+		}
+	
+		// literally skips whitespace
+		else if(checkSpace(phrase + i) == NULL){
+
+		}		
+
+		// Add this command to the vector
+		else{
 
 		}
-		else {
-			temp = checkQuotes(phrase + i);	
-			if(temp != NULL){
-				int length = temp - phrase - i;				
-				char* hold = NULL;
-				strncpy(phrase + i, hold, length);
-				commands.push_back(hold);
-			}
-		}
+		++i;
+	}
+	cout << endl << "Commands" << endl;
+	printVector(commands);
 
+	cout << endl << "Connectors" << endl;
+	printVector(connectors);
+}
+
+void printVector(vector<char*> v){
+	for(auto x: v){
+		cout << x << endl;
 	}
 }
 
