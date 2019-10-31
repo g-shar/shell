@@ -1,9 +1,9 @@
 # CS 100 RShell
 
 # Project Information
-Fall 2019 . 
-Richard Duong . 
-Gregory Shar 862087118
+Fall 2019 <br/>
+Richard Duong <br/> 
+Gregory Shar 862087118<br/>
 
 # Introduction
 This project is a command shell that prints a command prompt, reads in a line of commands and connectors from standard input, and executes the appropriate commands using fork, execvp, and waitpid. The program accomplishes this by first creating a command object that contains the executable in string form and a vector of passed in arguments that have been parsed already. The program then uses a composite pattern to create a tree composed of these command objects and connector objects. The program then traverses the tree, going through any input connectors and command objects to determine what commands should or should not be executed.
@@ -81,146 +81,20 @@ int main()
 
 # Development and Testing Roadmap
 
-#2 Create component interface Base_Cmd
-#3 Create mock classes for Cmd_Obj and subclasses of Connectors
-Create parse() function in Cmd_Obj
-Test parse() function 
-Create implementation of doWork() in Semicolon
-Test implementation of doWork() in Semicolon with other objects type Cmd_Obj 
-Create implementation of doWork() in And
-Test implementation of doWork() in And with other objects Semicolon and Cmd_Obj 
-Create implementation of doWork() in Or
-Test implementation of doWork() in Or with other objects Semicolon, Or, and Cmd_Obj 
-Create execute() function in Cmd_Obj
-Test execute() function with different edge cases
-Test the execution of different commands with different connectors
+#2 Create component interface Base_Cmd <br/>
+#3 Create mock classes for Cmd_Obj and subclasses of Connectors <br/>
+#4 Create parse() function in Cmd_Obj <br/>
+Test parse() function <br/>
+Create implementation of doWork() in Semicolon<br/>
+Test implementation of doWork() in Semicolon with other objects type Cmd_Obj <br/>
+Create implementation of doWork() in And<br/>
+Test implementation of doWork() in And with other objects Semicolon and Cmd_Obj <br/>
+Create implementation of doWork() in Or<br/>
+Test implementation of doWork() in Or with other objects Semicolon, Or, and Cmd_Obj <br/>
+Create execute() function in Cmd_Obj<br/>
+Test execute() function with different edge cases<br/>
+Test the execution of different commands with different connectors<br/>
 
 
-
-
-
-# Current Developments 10/27/2019 6:06 PM
-
-Base_Cmd:
-  
-	Cmd_Obj:
-		execute(); 
-
-		Executable* obj1;
-        Arg_List* obj2;
-
-	Connectors:
-
-		Base_Cmd *left, *right
-        
-        AND_AND &&       
-        PIPE_PIPE ||
-      	SEMICOLON ;
-
-EXECUTABLE
-
-Arg_List
-
-int main(){
-	
-    
-}
-
-class Interface{
-  
-  
-};
-
-//	Abstract base class for commands
-class Base_Cmd{
-	public:
-		Base_Cmd();										//Constructor
-  	virtual string display() = 0;
-  	
-  		
-  
-};
-
-
-class Cmd_Obj: public Base_Cmd{
-  public:
-  	Cmd_Obj();										//Constructor
-  	virtual string display();			//Display
-    void execute();								//Executes the full command using private variables
-  	
-  
-  private:
-		Executable* obj1;			//Executable from bin
-    Arg_list* obj2;				//List of args related to the executable
-  	
-};
-
-
-class Connectors: public Base_Cmd{
-  protected:
-    string display();
-  	Base_Cmd *left, *right	// Left & Right tree connections (connectors or full_cmds)
-    
-               
-};
-
-class And: public Connectors{
-  
-};
-
-class Or: public Connectors{
-
-};
-
-class Semicolon: public Connectors{
-  
-  
-};
-
-
-// special case with semicolon as leaf node
-; echo "hello"
-;
-echo "hello" ;
-
-; echo "hello" && echo "there" ;
-
-
-echo "hello"
-
-		
-
-Executable:		// independent header files for each exec. ?
-
-Arg_List:
-		vector<string>arguments;
-		parse();
-
-
-
-
-
-
-echo hello && goodbye
-echo "hello && goodbye"
-
-
-ls ;
-ls -a; echo hello && mkdir test || echo world; git status;
-
-
-	"ls -a" <- ; -> &&
-
-git clone <assignment-repo-url>
-cd <assignment-repo-url>
-git checkout tags/hw2
-git submodule init
-git submodule update
-cmake3 .
-make
-test -e rshell || echo “rshell executable missing, check submission instruction section of the specifications”
-test -e test || echo “test executable missing, check submission instruction section of the specifications”
-test -d unit_tests || echo “unit_tests/ directory missing, check submission instruction section of the specifications”
-test -d integration_tests || echo “integration_tests/ directory missing, check submission instruction section of the specifications”
 
 
