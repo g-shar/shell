@@ -39,6 +39,8 @@ Connectors is the abstract base class with subclasses for each connector: â€œ;â€
 Most of our findings for this test were mainly learning about how the main system functions work individually and also how they interacted with each other. The tests showed us how execvp terminates the child if it is successful, the importance of waitpid() and the different parameters it can take, and how execvp does not treat the first element in the array as part of the argument. We also found out that execvp() only returns if there is an error, in which case it returns -1. This is useful for when we implement this into our execute() function, because this functionality allows us to check for errors using perror().
 
 '''
+
+
 int main()
 {
     char* cmd="echo";
@@ -77,6 +79,8 @@ int main()
 
 	return 0;
 }
+
+
 '''
 
 ### Parsing research
@@ -86,6 +90,8 @@ We also did some preliminary testing on how the connectors act in different situ
 Our parse prototype function focused mainly on being able to separate and identify the differences between commands and connectors and be able to separate them into different buckets. There were different edge cases that had to be handled, such as consecutive whitespaces or handling quotation marks. There was also minor error handling such as a single ampersand or single pipe (_which will be corrected because they are valid connectors_). Our approach uses functions to filter but eventually will migrate into classes filtering and handling errors.
 
 '''
+
+
 /*******************************
  * Test parsing function
  *******************************/
@@ -161,6 +167,8 @@ void parseToVectors(char* phrase)
 	cout << endl << "Connectors:" << endl << "-----" << endl;
 	printVector(connectors);
 }
+
+
 '''
 
 # Development and Testing Roadmap
