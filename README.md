@@ -19,17 +19,17 @@ Base_Cmd is the abstract base component class used to help form the part-whole h
 
 ## Cmd_Obj
 
-Cmd_Obj contains a string with the executable and an array of parsed argument list strings. These two objects will both be used in the Cmd_Obj’s function implementation of doWork(), which will call execute() and will run the user-inputted command using execvp(), waitpid(), and fork(). Cmd_Obj also contains a parse() function that parses the input into the string executable and the array of argument list strings.
+Cmd_Obj contains a string with the executable and an array of parsed argument list strings. These two objects will both be used in the Cmd_Obj’s function implementation of doWork(), which will call execute() and will run the user-inputted command using execvp(), waitpid(), and fork(). Cmd_Obj also contains a parse() function that parses the input into the string executable and the array of argument list strings. 
 
 ## Connectors
 
-Connectors is the abstract base class with subclasses for each connector: “;” , “&&”, and “||”. Each subclass will contain a different implementation of the doWork() function that decides whether to execute the next command based on the previous command.
+Connectors is the abstract base class with subclasses for each connector: “;” , “&&”, and “||”. Each subclass will contain a different implementation of the doWork() function that decides whether to execute the next command based on the previous command. Connectors differ from Cmd_Objs in that they are composed of 2 base_cmd pointers- a left and a right. These can take either other connectors, or leaf Cmd_Objs and work to traverse and implement their specified logic. If connectors connect to a leaf, they usually verify whether the Cmd_Obj was able to successfully execute through execvp() to determine their next course of action. If connectors connect to another connector, we continue to traverse through the tree until we hit the leafs and return gradually and executing based on returns of the doWork() functions.
 
-* Class `Semicolon`: This class's implementation of doWork() will always allow the next command to execute
+* Class `Semicolon`: This class's implementation of doWork() will always allow the next command to execute. However semicolon does need to verify that the only arguments allowed next to it are command arguments or another semicolon.
 
-* Class `And`: This class's implementation of doWork() will allow the next command to execute if the previous command succeeded
+* Class `And`: This class's implementation of doWork() will allow the next command to execute if the previous command succeeded. We initially check the left base pointer to see if it's doWork allowed it to fully execute the command. If it has completed it, then attempt to execute the right base pointer. This class must also verify that left and right cannot be another connector.
 
-* Class `Or`: This class's implementation of doWork() in this class will allow the next command to execute if the previous command failed
+* Class `Or`: This class's implementation of doWork() in this class will allow the next command to execute if the previous command failed. We initially check the left base pointer to see if it's doWork allowed it to fully execute the command. If it hasn't completed it, then attempt to execute the right base pointer. This class must also verify that left and right cannot be another connector.
 
 # Protoypes/Research
 
