@@ -1,8 +1,8 @@
-# CS 100 Programming Project
+# CS 100 RShell
 
 # Project Information
-Fall 2019
-Richard Duong
+Fall 2019 . 
+Richard Duong . 
 Gregory Shar 862087118
 
 # Introduction
