@@ -80,20 +80,27 @@ int main()
   
 
 # Development and Testing Roadmap
+- [ ] #2 Create component class Base_Cmd 
+- [ ] #3 Create mock classes and functions for Cmd_Obj and subclasses of Connectors
+- [ ] #4 Create unit tests for implementation of doWork() in Semicolon
+- [ ] #5 Create implementation of doWork() in Semicolon and run unit tests
+- [ ] #6 Create and run integration tests of doWork() in Semicolon with type Cmd_Obj objects
+- [ ] #7 Create unit tests of doWork() in And
+- [ ] #8 Create implementation of doWork() in And and run unit tests
+- [ ] #9 Test implementation of doWork() in And integrated with other objects Semicolon and Cmd_Obj
+- [ ] #10 Create unit tests for doWork() in Or
+- [ ] #11 Create implementation for doWork() in Or and run unit tests 
+- [ ] #12 Test implementation of doWork() in Or integrated with other objects Semicolon, And, and Cmd_Obj
+- [ ] #13Create unit tests for parse() function
+- [ ] #14 Create integration tests for parse() function and Connector classes
+- [ ] #15 Create parse() function
+- [ ] #16 Create unit tests for execute() function with different edge cases
+- [ ] #17 Create integration tests for the execution of different commands with different connectors
+- [ ] #18 Create execute() function in Cmd_Obj and run unit and integration tests
 
-#2 Create component interface Base_Cmd <br/>
-#3 Create mock classes for Cmd_Obj and subclasses of Connectors <br/>
-#4 Create parse() function in Cmd_Obj <br/>
-Test parse() function <br/>
-Create implementation of doWork() in Semicolon<br/>
-Test implementation of doWork() in Semicolon with other objects type Cmd_Obj <br/>
-Create implementation of doWork() in And<br/>
-Test implementation of doWork() in And with other objects Semicolon and Cmd_Obj <br/>
-Create implementation of doWork() in Or<br/>
-Test implementation of doWork() in Or with other objects Semicolon, Or, and Cmd_Obj <br/>
-Create execute() function in Cmd_Obj<br/>
-Test execute() function with different edge cases<br/>
-Test the execution of different commands with different connectors<br/>
+
+
+ 
 
 
 
