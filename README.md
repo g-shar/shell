@@ -80,23 +80,23 @@ int main()
   
 
 # Development and Testing Roadmap
-- [ ] [#2](https://github.com/cs100/assignment-windows-defender/issues/2) Create component class Base_Cmd 
-- [ ] #3 Create mock classes and functions for Cmd_Obj and subclasses of Connectors
-- [ ] #4 Create unit tests for implementation of doWork() in Semicolon
-- [ ] #5 Create implementation of doWork() in Semicolon and run unit tests
-- [ ] #6 Create and run integration tests of doWork() in Semicolon with type Cmd_Obj objects
-- [ ] #7 Create unit tests of doWork() in And
-- [ ] #8 Create implementation of doWork() in And and run unit tests
-- [ ] #9 Test implementation of doWork() in And integrated with other objects Semicolon and Cmd_Obj
-- [ ] #10 Create unit tests for doWork() in Or
-- [ ] #11 Create implementation for doWork() in Or and run unit tests 
-- [ ] #12 Test implementation of doWork() in Or integrated with other objects Semicolon, And, and Cmd_Obj
-- [ ] #13Create unit tests for parse() function
-- [ ] #14 Create integration tests for parse() function and Connector classes
-- [ ] #15 Create parse() function
-- [ ] #16 Create unit tests for execute() function with different edge cases
-- [ ] #17 Create integration tests for the execution of different commands with different connectors
-- [ ] #18 Create execute() function in Cmd_Obj and run unit and integration tests
+- [#2](https://github.com/cs100/assignment-windows-defender/issues/2) Create component class Base_Cmd 
+- [#3](https://github.com/cs100/assignment-windows-defender/issues/3) Create mock classes and functions for Cmd_Obj and subclasses of Connectors
+- [#4](https://github.com/cs100/assignment-windows-defender/issues/3) Create unit tests for implementation of doWork() in Semicolon
+- [#5](https://github.com/cs100/assignment-windows-defender/issues/3) Create implementation of doWork() in Semicolon and run unit tests
+- [#6](https://github.com/cs100/assignment-windows-defender/issues/3) Create and run integration tests of doWork() in Semicolon with type Cmd_Obj objects
+- [#7](https://github.com/cs100/assignment-windows-defender/issues/3) Create unit tests of doWork() in And
+- [#8](https://github.com/cs100/assignment-windows-defender/issues/3) Create implementation of doWork() in And and run unit tests
+- [#9](https://github.com/cs100/assignment-windows-defender/issues/3) Test implementation of doWork() in And integrated with other objects Semicolon and Cmd_Obj
+- [#10](https://github.com/cs100/assignment-windows-defender/issues/3) Create unit tests for doWork() in Or
+- [#11](https://github.com/cs100/assignment-windows-defender/issues/3) Create implementation for doWork() in Or and run unit tests 
+- [#12](https://github.com/cs100/assignment-windows-defender/issues/3) Test implementation of doWork() in Or integrated with other objects Semicolon, And, and Cmd_Obj
+- [#13](https://github.com/cs100/assignment-windows-defender/issues/3)Create unit tests for parse() function
+- [#14](https://github.com/cs100/assignment-windows-defender/issues/3) Create integration tests for parse() function and Connector classes
+- [#15](https://github.com/cs100/assignment-windows-defender/issues/3) Create parse() function
+- [#16](https://github.com/cs100/assignment-windows-defender/issues/3) Create unit tests for execute() function with different edge cases
+- [#17](https://github.com/cs100/assignment-windows-defender/issues/3) Create integration tests for the execution of different commands with different connectors
+- [#18](https://github.com/cs100/assignment-windows-defender/issues/3) Create execute() function in Cmd_Obj and run unit and integration tests
 
 
 
