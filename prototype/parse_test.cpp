@@ -202,10 +202,9 @@ void parseToVectors(char* phrase)
 
 
 	while(phrase[i] != '\0'){
-		// cout << endl << "character: " << phrase[i] << endl;
+
 		// If a semicolon ;
 		if(checkSemicolon(phrase + i) != NULL){
-			// cout << "SEMICOLON" << endl;
 			length = 1;
 			hold = newStrCpy(phrase + i, length);
 			connectors.push_back(hold);
@@ -214,7 +213,6 @@ void parseToVectors(char* phrase)
 
 		// If an AND ampersand &&
 		else if(checkAnd(phrase + i) != NULL){
-			// cout << "AND" << endl;
 			length = 2;
 			hold = newStrCpy(phrase + i, length);
 			connectors.push_back(hold);
@@ -223,7 +221,6 @@ void parseToVectors(char* phrase)
 
 		// If an OR pipe ||
 		else if(checkOr(phrase + i) != NULL){
-			// cout << "OR" << endl;
 			length = 2;
 			hold = newStrCpy(phrase + i, length);
 			connectors.push_back(hold);
@@ -236,7 +233,6 @@ void parseToVectors(char* phrase)
 		
 		// If has double quotation marks \"
 		else if(checkQuotes(phrase + i) != NULL){
-			// cout << "Quotes" << endl;
 			int length = sizeQuote(phrase + i);
 			hold = newStrCpy(phrase + i, length);
 			commands.push_back(hold);
@@ -245,13 +241,11 @@ void parseToVectors(char* phrase)
 		
 		// If a space (commands & connectors ignore all whitespace)
 		else if(checkSpace(phrase + i) != NULL){
-			// cout << "Space" << endl;
 			++i;
 		}
 	
 		// If a command or argument
 		else{
-			// cout << "Command" << endl;
 			int length = sizeCmd(phrase + i);
 			hold = newStrCpy(phrase + i, length);
 			commands.push_back(hold);
@@ -267,10 +261,7 @@ void parseToVectors(char* phrase)
 }
 
 
-
-
-
-/***********************************************
+/*********************************************************************
  * Parsing method notes:
  *	
  *	Check functions:
@@ -282,12 +273,21 @@ void parseToVectors(char* phrase)
  *		=> Quotation marks!
  *		=> Finding starts & ends of command & argument elements
  *
+ *	Test Parsing function:
+ *	- Parses the char string and breaks apart into 2 parts:
+ *		=> commands
+ *		=> connectors
+ *
+ *	- Handles plenty of edge cases and also exits on invalid inputs
+ *		=> such as single ampersands or pipes
  *
  *
+ *	Additional notes:
+ *	- May require a class being built for parsing / filtering
+ *	- Vector storage is not ideal when migrating over to tree format
+ *	- Let's not deal with cstrings until the very end
  *
- *
- * Issues:
- *
- *
- *
- ************************************************/
+ **********************************************************************/
+
+
+
