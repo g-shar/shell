@@ -33,9 +33,135 @@ Connectors is the abstract base class with subclasses for each connector: â€œ;â€
 
 # Protoypes/Research
 
+
+### System function research
+
 Most of our findings for this test were mainly learning about how the main system functions work individually and also how they interacted with each other. The tests showed us how execvp terminates the child if it is successful, the importance of waitpid() and the different parameters it can take, and how execvp does not treat the first element in the array as part of the argument. We also found out that execvp() only returns if there is an error, in which case it returns -1. This is useful for when we implement this into our execute() function, because this functionality allows us to check for errors using perror().
 
+'''
+int main()
+{
+    char* cmd="echo";
+    char* argList[5];
+
+    argList[0]="echo";
+    argList[1]="hello";
+    argList[2]="&&";
+    argList[3]="goodbye";
+    argList[4]=NULL;
+
+    int status;
+    pid_t pid;
+
+
+    pid=fork();
+
+	if(pid==0)
+	{
+		if(execvp(cmd, argList)<0)
+		{
+			perror("execvp issue");
+		}
+	}
+
+	else if(pid==-1)
+	{
+		perror("forking issue");
+		exit(1);
+	}
+
+	else if(pid>0)
+	{
+		waitpid(-1, &status, 0);
+	}
+
+	return 0;
+}
+'''
+
+### Parsing research
+
 We also did some preliminary testing on how the connectors act in different situations. Some things we noticed were that you are not able to chain connectors. The example "echo "hello" && ; echo "goodbye"" would not work, and has a syntax error. We also noticed how semicolons did not have to be included, which is important to take into consideration, especially when there is no connector at all ("echo "hello"" will work just fine with no connector). 
+
+Our parse prototype function focused mainly on being able to separate and identify the differences between commands and connectors and be able to separate them into different buckets. There were different edge cases that had to be handled, such as consecutive whitespaces or handling quotation marks. There was also minor error handling such as a single ampersand or single pipe (_which will be corrected because they are valid connectors_). Our approach uses functions to filter but eventually will migrate into classes filtering and handling errors.
+
+'''
+/*******************************
+ * Test parsing function
+ *******************************/
+
+
+// Parses cstring into appropriate bucket vectors prototype
+void parseToVectors(char* phrase)
+{
+	
+	// Just to store commands & connectors
+	vector<char*> commands, connectors;
+
+	char* hold = NULL;	// Where cstring is copied to
+	int length = 0;		// Used only for quote & cmd size
+	int i = 0;		// Iterating value for the cstring
+
+
+	while(phrase[i] != '\0'){
+
+		// If a semicolon ;
+		if(checkSemicolon(phrase + i) != NULL){
+			length = 1;
+			hold = newStrCpy(phrase + i, length);
+			connectors.push_back(hold);
+			i += length;
+		}
+
+		// If an AND ampersand &&
+		else if(checkAnd(phrase + i) != NULL){
+			length = 2;
+			hold = newStrCpy(phrase + i, length);
+			connectors.push_back(hold);
+			i+=length;
+		}
+
+		// If an OR pipe ||
+		else if(checkOr(phrase + i) != NULL){
+			length = 2;
+			hold = newStrCpy(phrase + i, length);
+			connectors.push_back(hold);
+			i += length ;
+		}
+
+
+		/* Needs separate implementation for matching single
+		 * quotation marks */	
+		
+		// If has double quotation marks \"
+		else if(checkQuotes(phrase + i) != NULL){
+			int length = sizeQuote(phrase + i);
+			hold = newStrCpy(phrase + i, length);
+			commands.push_back(hold);
+			i += length;
+		}
+		
+		// If a space (commands & connectors ignore all whitespace)
+		else if(checkSpace(phrase + i) != NULL){
+			++i;
+		}
+	
+		// If a command or argument
+		else{
+			int length = sizeCmd(phrase + i);
+			hold = newStrCpy(phrase + i, length);
+			commands.push_back(hold);
+			i += length;
+		}		
+	}
+
+	cout << endl << "Commands:" << endl << "-----" << endl;
+	printVector(commands);
+
+	cout << endl << "Connectors:" << endl << "-----" << endl;
+	printVector(connectors);
+}
+'''
 
 # Development and Testing Roadmap
 - [#2](https://github.com/cs100/assignment-windows-defender/issues/2) Create component class Base_Cmd 
