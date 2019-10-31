@@ -80,7 +80,7 @@ int main()
   
 
 # Development and Testing Roadmap
-- [ ] https://github.com/cs100/assignment-windows-defender/issues/2 Create component class Base_Cmd 
+- [ ] [#2](https://github.com/cs100/assignment-windows-defender/issues/2) Create component class Base_Cmd 
 - [ ] #3 Create mock classes and functions for Cmd_Obj and subclasses of Connectors
 - [ ] #4 Create unit tests for implementation of doWork() in Semicolon
 - [ ] #5 Create implementation of doWork() in Semicolon and run unit tests
