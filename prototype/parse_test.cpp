@@ -45,19 +45,16 @@ int main()
 
 
 	/* Some weird test results*/
-	test[11] = "echo hello ;";
+	// test[11] = "echo hello ;";
 	// Expects: 
 	// echo hello ;
 	
-	test[12] = ";;&&;";
+	// test[12] = ";;&&;";
 	// Expects:
 	// Syntax error
 	
 
 	// Needs handles on consecutive connectors (exception for semicolon)
-	
-
-	test[12] = "echo hello ; && echo there";
 
 	for(int i = 0; i < NUM_TESTS; ++i){
 		cout << "Test " << i << " => " << test[i] << endl;
