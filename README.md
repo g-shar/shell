@@ -6,7 +6,7 @@ Richard Duong <br/>
 Gregory Shar 862087118<br/>
 
 # Introduction
-This project is a command shell that prints a command prompt, reads in a line of commands and connectors from standard input, and executes the appropriate commands using fork, execvp, and waitpid. The program accomplishes this by first creating a command object that contains the executable in string form and a vector of passed in arguments that have been parsed already. The program then uses a composite pattern to create a tree composed of these command objects and connector objects. The program then traverses the tree, going through any input connectors and command objects to determine what commands should or should not be executed.
+This project is a command shell that prints a command prompt, reads in a line of commands and connectors from standard input, and executes the appropriate commands using fork, execvp, and waitpid. The program accomplishes this by first creating multiple command objects for each user-inputted command that each contain the executable in string form and an array of tje passed in arguments that have been parsed already. The program then uses a composite pattern to create a tree composed of these command objects and connector objects, with the command objects as the primitives and the connector objects as the composites. The program then traverses the tree, using a doWork() funciton in order to go through any input connectors and command objects to determine what commands should or should not be executed based on previous commands, and to execute the commands themselves.
 
 # Diagram
 
@@ -14,19 +14,22 @@ This project is a command shell that prints a command prompt, reads in a line of
 
 ## Base_Cmd
 
-Base_Cmd is the abstract base component class used to help form the part-whole hierarchy containing the composites (Connectors) and the primitives (Cmd_Obj)
+Base_Cmd is the abstract base component class used to help form the part-whole hierarchy containing the composites (Connectors) and the primitives (Cmd_Obj). The hierarchy created allows the program to decide which commands to execute based on the user-inputted connectors and in what order to execute them.
 
 ## Cmd_Obj
 
-Cmd_Obj contains a string with the executable and a vector of parsed argument list strings. These two objects will both be used in the Cmd_Obj’s function implementation of doWork(), which will call execute() and will run the inputted command using execvp(), waitpid(), and fork(). Cmd_Obj also contains a parse() function that parses the input into the string executable and array of argument list strings
+Cmd_Obj contains a string with the executable and an array of parsed argument list strings. These two objects will both be used in the Cmd_Obj’s function implementation of doWork(), which will call execute() and will run the user-inputted command using execvp(), waitpid(), and fork(). Cmd_Obj also contains a parse() function that parses the input into the string executable and the array of argument list strings.
 
 ## Connectors
 
 Connectors is the abstract base class with subclasses for each connector: “;” , “&&”, and “||”. Each subclass will contain a different implementation of the doWork() function that decides whether to execute the next command based on the previous command.
+
 ### Semicolon  
 Implementation of doWork() will always allow the next command to execute
+
 ### And
 Implementation of doWork() will allow the next command to execute if the previous command succeeded
+
 ### Or
 Implementation of doWork() will allow the next command to execute if the previous command failed
 
