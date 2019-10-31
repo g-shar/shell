@@ -24,14 +24,14 @@ Cmd_Obj contains a string with the executable and an array of parsed argument li
 
 Connectors is the abstract base class with subclasses for each connector: “;” , “&&”, and “||”. Each subclass will contain a different implementation of the doWork() function that decides whether to execute the next command based on the previous command.
 
-### Semicolon  
-Implementation of doWork() will always allow the next command to execute
+   ### Semicolon  
+      Implementation of doWork() in this class will always allow the next command to execute
 
-### And
-Implementation of doWork() will allow the next command to execute if the previous command succeeded
+   ### And
+      Implementation of doWork() in this class will allow the next command to execute if the previous command succeeded
 
-### Or
-Implementation of doWork() will allow the next command to execute if the previous command failed
+   ### Or
+      Implementation of doWork() in this class will allow the next command to execute if the previous command failed
 
 # Protoypes/Research
 
