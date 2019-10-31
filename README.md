@@ -91,7 +91,7 @@ int main()
 - [#10](https://github.com/cs100/assignment-windows-defender/issues/3) Create unit tests for doWork() in Or
 - [#11](https://github.com/cs100/assignment-windows-defender/issues/3) Create implementation for doWork() in Or and run unit tests 
 - [#12](https://github.com/cs100/assignment-windows-defender/issues/3) Test implementation of doWork() in Or integrated with other objects Semicolon, And, and Cmd_Obj
-- [#13](https://github.com/cs100/assignment-windows-defender/issues/3)Create unit tests for parse() function
+- [#13](https://github.com/cs100/assignment-windows-defender/issues/3) Create unit tests for parse() function
 - [#14](https://github.com/cs100/assignment-windows-defender/issues/3) Create integration tests for parse() function and Connector classes
 - [#15](https://github.com/cs100/assignment-windows-defender/issues/3) Create parse() function
 - [#16](https://github.com/cs100/assignment-windows-defender/issues/3) Create unit tests for execute() function with different edge cases
