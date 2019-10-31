@@ -35,52 +35,9 @@ Implementation of doWork() will allow the next command to execute if the previou
 
 # Protoypes/Research
 
-Most of our findings for this test were mainly learning about how the main system functions work individually and also together. The tests helped to show how execvp terminates the child if it is successful, the importance of waitpid() and the different parameters the function takes, and how execvp does not treat the first element in the array as part of the argument list. 
-```
-#include <unistd.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <string>
-#include <iostream>
+Most of our findings for this test were mainly learning about how the main system functions work individually and also how they interacted with each other. The tests showed us how execvp terminates the child if it is successful, the importance of waitpid() and the different parameters it can take, and how execvp does not treat the first element in the array as part of the argument. We also found out that execvp() only returns if there is an error, in which case it returns -1. This is useful for when we implement this into our execute() function, because this functionality allows us to check for errors using perror().
 
-int main()
-{
-  char* cmd="echo";
-  char* argList[5];
-  argList[0]="echo";
-  argList[1]="hello";
-  argList[2]="&&";
-  argList[3]="goodbye";
-  argList[4]=NULL;
-  int status;
-
-  pid_t pid;
-
-  pid=fork();
-
-  if(pid==0)		//if in the child
-  {
-    if(execvp(cmd, argList)<0)	//if there was an error in execvp()
-    {
-      perror("execvp issue");
-
-    }
-  }
-  else if(pid==-1)		//if there was an error in forking
-  {
-    perror("forking issue");
-    exit(1);
-  }
-  else if(pid>0)								//if in the parent
-  {
-    waitpid(-1, &status, 0);
-    //std::cout<<"parent: "<<pid<<std::endl;
-  }
-  return 0;
-}
-```
-  
+We also did some preliminary testing on how the connectors act in different situations. Some things we noticed were that you are not able to chain connectors. The example "echo "hello" && ; echo "goodbye"" would not work, and has a syntax error. We also noticed how semicolons did not have to be included, which is important to take into consideration, especially when there is no connector at all ("echo "hello"" will work just fine with no connector). 
 
 # Development and Testing Roadmap
 - [#2](https://github.com/cs100/assignment-windows-defender/issues/2) Create component class Base_Cmd 
