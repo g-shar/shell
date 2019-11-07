@@ -1,0 +1,8 @@
+Naming conventions:
+    - Class names capitalize the first letter
+    - Capital Underscore Capital
+  
+Alignment:
+    - Left bracket on the very right of function & class signatures
+    - 4 space tabs
+    - public, protected, private aligned vertically with "class"
