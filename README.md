@@ -13,13 +13,17 @@ This project is a command shell that prints a command prompt, reads in a line of
 
 # Classes
 
+## Full_Cmd
+
+Full_Cmd is the interface used to encapsulate the program, and where the command is parsed in order to help form the part-whole hierarchy of Base_Cmd pointers. The interface also contains an execute command, which uses the tree formed from Connectors and Cmd_Obj to run the full command inputted by the user.
+
 ## Base_Cmd
 
-Base_Cmd is the abstract base component class used to help form the part-whole hierarchy containing the composites (Connectors) and the primitives (Cmd_Obj). The hierarchy created allows the program to decide which commands to execute based on the user-inputted connectors and in what order to execute them.
+Base_Cmd is the abstract base component class used to help form the part-whole hierarchy containing the composites (Connectors) and the primitives (Cmd_Obj). The class also contains the pure virtual function doWork(), which has different implementations based on the derived class.
 
 ## Cmd_Obj
 
-Cmd_Obj contains a string with the executable and an array of parsed argument list strings. These two objects will both be used in the Cmd_Obj’s function implementation of doWork(), which will call execute() and will run the user-inputted command using execvp(), waitpid(), and fork(). Cmd_Obj also contains a parse() function that parses the input into the string executable and the array of argument list strings. 
+Cmd_Obj is a subclass of Base_Cmd. Cmd_Obj differs from Base_Cmd because it contains a string with the executable and an array of parsed argument list strings. These two objects will both be used in the Cmd_Obj’s function implementation of doWork(), which will run a single user-inputted command using execvp(), waitpid(), and fork().  
 
 ## Connectors
 
