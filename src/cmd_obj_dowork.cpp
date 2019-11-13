@@ -6,34 +6,46 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string>
+#include<iostream>
 
-#include "cmd_obj.hpp"
+#include "../header/cmd_obj.hpp"
 
-bool doWork() {
+using namespace std;
+
+bool Cmd_Obj::doWork() {
+   bool process=true;
    int status;
    pid_t pid;
 
    pid=fork();
 
    if(pid==0)
-   {
-      if(execvp(this->executable, this->argList)<0)
-      {
-         perror("execvp");
-      }
-      exit(0);
+   { 
+      execvp(this->executable, this->argList);      
+      perror("execvp");
+      exit(1);
    }
    else if(pid==-1)
    {
       perror("fork");
       exit(1);
    }
-   else if(pid>0)
+   else
    {
       waitpid(-1, &status, 0);
    }
-
-   return 0;
+   if(WIFEXITED(status))
+   {
+      if(WEXITSTATUS(status)==0)
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+   return false;
 }
 
 #endif
