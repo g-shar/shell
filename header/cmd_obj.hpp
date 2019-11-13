@@ -4,9 +4,14 @@
 #include "base_cmd.hpp"
 
 class Cmd_Obj: public Base_Cmd {
+public:
+   Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list){};
+   virtual bool doWork();
+
 private:
-   bool doWork();
    void parse();
    char* executable;
-   char* argList[];
+   char** argList;
 };
+
+#endif
