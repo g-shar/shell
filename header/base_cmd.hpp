@@ -1,6 +1,9 @@
 #ifndef __BASE_CMD_HPP__
 #define __BASE_CMD_HPP__
 
+#include <cstring>
+using namespace std;
+
 class Base_Cmd {
 
 public:

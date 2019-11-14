@@ -23,7 +23,7 @@ private:
 		{
 			if(checkQuotes(cmd) != NULL)
 			{
-				length = sizeQuote(phrase + i);	
+				length = sizeQuote(cmd + i);	
 			}			
 
 			else if(checkSpace(cmd) != NULL)
@@ -33,10 +33,10 @@ private:
 			}
 
 			else{
-				length = sizeArg(phrase + i);
+				length = sizeArg(cmd + i);
 			}
 
-			argList[j] = newStrCpy(phrase + i, length);
+			argList[j] = newStrCpy(cmd + i, length);
 			i += length;
 			++j;
 		}

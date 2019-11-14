@@ -5,11 +5,12 @@
 
 class Semicolon: public Connectors {
 public:
-   Semicolon(Base_Cmd* left, Base_Cmd* right):Connectors(left,right){}
-   virtual bool doWork() {
-      left->doWork();
-      return right->doWork();
-   }
+	Semicolon():Connectors(NULL, NULL){}
+	Semicolon(Base_Cmd* left, Base_Cmd* right):Connectors(left,right){}
+   	virtual bool doWork() {
+   	   left->doWork();
+   	   return right->doWork();
+   	}
 };
 
 #endif
