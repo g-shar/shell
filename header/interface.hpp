@@ -21,13 +21,13 @@ private:
 
 	// Helper function (returns the correct connector)
 	Base_Cmd* getConnector(char* sign, Base_Cmd* left, Base_Cmd* right){
-		if(sign == ";"){
+		if(checkSemicolon(sign)){
 			return new Semicolon(left, right);
 		}
-		else if(sign == "&&"){
+		else if(checkAnd(sign)){
 			return new And(left, right);
 		}
-		else if(sign == "||"){
+		else if(checkOr(sign)){
 			return new Or(left, right);
 		}
 		throw "no connector exception";
@@ -38,28 +38,34 @@ private:
 	// Tree construction with a vector (skewed)
 	void buildTree(vector<char*> base_commands)
 	{
-		cout << "Building tree" << endl;
 
 		queue<Base_Cmd*> Q;
-		char* temp = "";
+		char* temp = NULL;
 		int i = base_commands.size() - 1;
 
 		// Currently not handling "echo hello;"
 		if(base_commands[i] == ";"){
-			
+		
 		}
 
 		while(i >= 0)
 		{
-			cout << i << endl;
-			if(base_commands[i] != ";" || base_commands[i] != "||" || base_commands[i] != "&&")
+			// construct tree bottom up
+			if(Q.size() == 2){
+				Q.push(getConnector(temp, Q.back(), Q.front()));
+				Q.pop();
+				Q.pop();
+				temp = NULL;
+			}
+
+			if(!(checkSemicolon(base_commands[i]) || checkOr(base_commands[i]) || checkAnd(base_commands[i])))
 			{
 				Q.push(new Cmd_Obj(base_commands[i]));
-				++i;
+				--i;
 				continue;
 			}
 
-			else if(temp == ""){
+			else if(temp == NULL){
 				temp = base_commands[i];
 			}
 
@@ -67,21 +73,18 @@ private:
 				throw "two consecutive connectors exception";
 			}
 
-			// construct tree bottom up
-			if(Q.size() == 2){
-				Q.push(getConnector(temp, Q.back(), Q.front()));
-				Q.pop();
-				Q.pop();
-				temp = "";
-			}
+
 			--i;
 		}
 		
-		if(temp != ""){
+		/*
+		if(temp != NULL){
 			throw "incomplete connector exception";
 			// e.g. "echo hello ||" will crash
 			// as of right now "echo hello;" will also crash even though it is valid
 		}
+		*/
+
 		call = Q.front();
 	}
 
@@ -95,8 +98,6 @@ private:
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
-			cout << "parse interface" << endl;
-
 			// Semicolons
 			if(Base_Cmd::checkSemicolon(input + i) != NULL)
 			{
@@ -137,13 +138,13 @@ private:
 				i += length;
 			}
 
-			// Constructs the tree
-			cout << "Build tree interface" << endl;
-			buildTree(base_commands);
-
-			/* TEST */
-			printV(base_commands);
 		}
+	
+		// Constructs the tree
+		buildTree(base_commands);
+
+		/* TEST */
+		// printV(base_commands);
 	}
 
 public:
@@ -162,7 +163,7 @@ public:
 	/* Test functions */
 	void printV(vector<char*> temp){
 		for(auto x: temp){
-			cout << x;
+			cout << x << endl;
 		}
 	}
 
