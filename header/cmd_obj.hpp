@@ -104,12 +104,14 @@ private:
 
 		cmd = vList[0];
 		size = j;
-		argList = new char*[size];
+		argList = new char*[size + 1];		// account for null termination entry
 		
 		// set cstr arr to vector
 		for(int k = 0; k < size; ++k){
 			argList[k] = vList[k];
 		}
+		argList[size + 1] = "\0";
+		executable = argList[0];
 
 
 

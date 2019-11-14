@@ -149,12 +149,15 @@ private:
 
 public:
 	
-
 	Interface(char* cmd){
 		parse(cmd);	
 	}
 
 	Interface(){}
+
+	void setCommand(char* cmd){
+		parse(cmd);
+	}
 
 	virtual bool doWork(){
 		return call->doWork();
