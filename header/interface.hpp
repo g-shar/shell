@@ -4,8 +4,13 @@
 
 #include <queue>
 #include <vector>
+
 #include "base_cmd.hpp"
 #include "cmd_obj.hpp"
+#include "connectors.hpp"
+#include "and.hpp"
+#include "or.hpp"
+#include "semicolon.hpp"
 
 class Interface: public Base_Cmd{
 private:
