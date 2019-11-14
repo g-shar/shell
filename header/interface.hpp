@@ -63,6 +63,7 @@ private:
 				Q.pop();
 				cur = cur->right;		// fix this ugly mess later
 			}
+
 			++i;
 		}
 

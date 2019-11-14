@@ -10,6 +10,14 @@ public:
 	}
 
 	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list){};
+
+	~Cmd_Obj(){
+		for(int i = 0; i < size; ++i)
+		{
+			delete[] argList[i];
+		}
+	}
+
 	virtual bool doWork();
 
 private:
@@ -41,10 +49,12 @@ private:
 			++j;
 		}
 		cmd = argList[0];
+		size = j;
   	}
 
    	char* executable;
    	char** argList;
+	int size;
 };
 
 #endif
