@@ -67,6 +67,8 @@ public:
 		return phrase;
 	}
 
+
+
 	/*******************************
 	 *SPECIAL HELPER FUNCTIONS
 	 *******************************/
@@ -87,7 +89,7 @@ public:
 	}
 
 	// Finds the size of the command
-	static int sizeCmd(char* phrase)
+	static int sizeArg(char* phrase)
 	{
 		int i = 0;
 		while(phrase[i] != '\0')
@@ -104,6 +106,22 @@ public:
 		}
 		return i;
 
+	}
+
+	static int sizeCmdObj(char* phrase)
+	{
+		int i = 0;
+		while(phrase[i] != '\0')
+		{
+			if((checkSemicolon(phrase + i) != NULL) ||
+			   (checkAnd(phrase + i) != NULL) ||
+			   (checkOr(phrase + i) != NULL))
+			{
+				return i;
+			}
+			++i;
+		}
+		return i;
 	}
 
 
