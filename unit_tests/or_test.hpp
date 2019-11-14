@@ -5,7 +5,7 @@
 
 TEST(OrTestSet, twoCommandSuccessTest) {
    char* argList[5];
-   char* cmd="echo";
+   const char* cmd="echo";
    
    argList[0]="echo";
    argList[1]="first";
@@ -13,7 +13,7 @@ TEST(OrTestSet, twoCommandSuccessTest) {
    argList[3]="executed";
    argList[4]=NULL;
   
-   char* cmd2="ls"; 
+   const char* cmd2="ls"; 
    char* argList2[2];
    
    argList2[0]="ls";

@@ -5,7 +5,7 @@
 
 TEST(AndTestSet, twoCommandSuccessTest) {
    char* argList[5];
-   char* cmd="echo";
+   const char* cmd="echo";
    
    argList[0]="echo";
    argList[1]="first";
@@ -14,7 +14,7 @@ TEST(AndTestSet, twoCommandSuccessTest) {
    argList[4]=NULL;
   
    char* cmd2="ls"; 
-   char* argList2[2];
+   const char* argList2[2];
    
    argList2[0]="ls";
    argList2[1]=NULL;
@@ -31,7 +31,7 @@ TEST(AndTestSet, twoCommandSuccessTest) {
 
 TEST(AndTestSet, FirstCommandFailsTest) {
    char* argList[5];
-   char* cmd="eho";
+   const char* cmd="eho";
    
    argList[0]="eho";
    argList[1]="first";
@@ -40,7 +40,7 @@ TEST(AndTestSet, FirstCommandFailsTest) {
    argList[4]=NULL;
   
    char* cmd2="ls"; 
-   char* argList2[2];
+   const char* argList2[2];
    
    argList2[0]="ls";
    argList2[1]=NULL;
@@ -56,7 +56,7 @@ TEST(AndTestSet, FirstCommandFailsTest) {
 }
 TEST(AndTestSet, SecondCommandFailsTest) {
    char* argList[5];
-   char* cmd="echo";
+   const char* cmd="echo";
    
    argList[0]="echo";
    argList[1]="first";
@@ -65,7 +65,7 @@ TEST(AndTestSet, SecondCommandFailsTest) {
    argList[4]=NULL;
   
    char* cmd2="ls"; 
-   char* argList2[2];
+   const char* argList2[2];
    
    argList2[0]="s";
    argList2[1]=NULL;
