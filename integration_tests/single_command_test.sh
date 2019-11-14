@@ -1,11 +1,11 @@
 #!/bin/sh
 
-INPUTS=( "echo \"hello\""  "ls -a" "mkdir test")
+TESTS=( "echo \"hello\""  "ls -a" "mkdir test")
 
-for input in "${INPUTS[@]}"
+for input in "${TESTS[@]}"
 do
    echo "SingleCommandExecutions test with ${input}"
-   ./rshell ${input} > integration_tests
+   echo $(./rshell ${input}) > integration_tests.txt
    EXECUTION=$?
    if [ $EXECUTION -eq 0 ];
    then
@@ -16,8 +16,11 @@ do
    fi
    
    input1=$(${input})
+   output=$(cat integration_tests.txt)
+   echo "system: $input1"
+   echo "rshell: $output"
    echo "Checking if correct execution of command..."
-   if [ "$output" == "$input1" ]
+   if [ "$output"= "$input1" ]
    then 
       echo "Single Command Execution test passed with ${input}"
    else 
@@ -25,4 +28,4 @@ do
    fi
 done
 
-#tests primarily for command executions
+#tests primarily for single command executions
