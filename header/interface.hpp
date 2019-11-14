@@ -38,6 +38,8 @@ private:
 	// Tree construction with a vector (skewed)
 	void buildTree(vector<char*> base_commands)
 	{
+		cout << "Building tree" << endl;
+
 		queue<Base_Cmd*> Q;
 		char* temp = "";
 		int i = base_commands.size() - 1;
@@ -49,6 +51,7 @@ private:
 
 		while(i >= 0)
 		{
+			cout << i << endl;
 			if(base_commands[i] != ";" || base_commands[i] != "||" || base_commands[i] != "&&")
 			{
 				Q.push(new Cmd_Obj(base_commands[i]));
@@ -66,7 +69,7 @@ private:
 
 			// construct tree bottom up
 			if(Q.size() == 2){
-				Q.push(getConnector(Q.back(), Q.front());
+				Q.push(getConnector(temp, Q.back(), Q.front()));
 				Q.pop();
 				Q.pop();
 				temp = "";
@@ -75,7 +78,7 @@ private:
 		}
 		
 		if(temp != ""){
-			throw "incomplete connector exception"
+			throw "incomplete connector exception";
 			// e.g. "echo hello ||" will crash
 			// as of right now "echo hello;" will also crash even though it is valid
 		}
@@ -92,6 +95,8 @@ private:
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
+			cout << "parse interface" << endl;
+
 			// Semicolons
 			if(Base_Cmd::checkSemicolon(input + i) != NULL)
 			{
@@ -133,6 +138,7 @@ private:
 			}
 
 			// Constructs the tree
+			cout << "Build tree interface" << endl;
 			buildTree(base_commands);
 
 			/* TEST */
