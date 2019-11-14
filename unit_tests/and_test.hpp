@@ -2,6 +2,7 @@
 #define __AND_TEST_HPP__
 
 #include "../header/and.hpp"
+#include "../header/cmd_obj.hpp"
 
 TEST(AndTestSet, twoCommandSuccessTest) {
    char* argList[5];
@@ -13,8 +14,8 @@ TEST(AndTestSet, twoCommandSuccessTest) {
    argList[3]="executed";
    argList[4]=NULL;
   
-   char* cmd2="ls"; 
-   const char* argList2[2];
+   const char* cmd2="ls"; 
+   char* argList2[2];
    
    argList2[0]="ls";
    argList2[1]=NULL;
@@ -39,8 +40,8 @@ TEST(AndTestSet, FirstCommandFailsTest) {
    argList[3]="executed";
    argList[4]=NULL;
   
-   char* cmd2="ls"; 
-   const char* argList2[2];
+   const char* cmd2="ls"; 
+   char* argList2[2];
    
    argList2[0]="ls";
    argList2[1]=NULL;
@@ -64,8 +65,8 @@ TEST(AndTestSet, SecondCommandFailsTest) {
    argList[3]="executed";
    argList[4]=NULL;
   
-   char* cmd2="ls"; 
-   const char* argList2[2];
+   const char* cmd2="ls"; 
+   char* argList2[2];
    
    argList2[0]="s";
    argList2[1]=NULL;

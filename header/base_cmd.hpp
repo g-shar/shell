@@ -2,6 +2,7 @@
 #define __BASE_CMD_HPP__
 
 #include <cstring>
+#include <vector>
 using namespace std;
 
 class Base_Cmd {
