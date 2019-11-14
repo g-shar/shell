@@ -5,14 +5,16 @@
 
 class Or: public Connectors {
 public:
-   Or(Base_Cmd* left, Base_Cmd* right): Connectors(left, right){}
-   virtual bool doWork(){
-      if(left->doWork()==false)
-      {
-         return right->doWork();
-      }
-      return false;
-   }
+
+	Or(): Connectors(NULL, NULL){}
+	Or(Base_Cmd* left, Base_Cmd* right): Connectors(left, right){}
+   	virtual bool doWork(){
+   	   if(left->doWork()==false)
+   	   {
+   	      return right->doWork();
+   	   }
+   	   return false;
+   	}
 };
 
 #endif
