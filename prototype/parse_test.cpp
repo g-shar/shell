@@ -144,7 +144,7 @@ int sizeQuote(char* phrase)
 	}
 		
 	//	error from unfinished quote
-	exit(1);
+	throw "Unclosed string literal exception";
 }
 
 // Finds the size of the command
