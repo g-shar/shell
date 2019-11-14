@@ -18,7 +18,7 @@ public:
 		}
 	}
 
-	virtual bool doWork();
+	virtual bool doWork(){}
 
 private:
 
