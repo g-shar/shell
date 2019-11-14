@@ -8,7 +8,6 @@
 #include <string>
 #include <iostream>
 
-
 #include "base_cmd.hpp"
 
 class Cmd_Obj: public Base_Cmd {
@@ -112,10 +111,6 @@ private:
 		}
 		argList[size + 1] = "\0";
 		executable = argList[0];
-
-
-
-
 
   	}
 
