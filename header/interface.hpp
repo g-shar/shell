@@ -60,8 +60,12 @@ private:
 				base_commands.push_back(hold);
 				i += length;
 			}
+
+			// Constructs the tree
+			buildTree(base_commands);
 		}
 
+		// Tree construction with a vector (skewed)
 		void buildTree(vector<char*> base_commands)
 		{
 			Base_Cmd* cur = NULL; 
@@ -111,22 +115,15 @@ private:
 			cur->left = Q.front();
 			cur->right = Q.back();
 		}
-
-
-
 	}
 
 public:
-	Interface(char* Cmd):{
-		
+	Interface(char* cmd){
+		parse(cmd);	
 	}
 
 	virtual bool doWork(){
 		return call->doWork();
 	}
-
-
-
-
 
 }
