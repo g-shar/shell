@@ -9,10 +9,6 @@ SET(UNIT_TESTS
       unit_tests/co_dowork_test.hpp
 )
 
-ADD_LIBRARY(src
-   src/cmd_obj_dowork.cpp
-)
-
 ADD_EXECUTABLE( test
    unit_tests/unit_test.cpp 
 )
