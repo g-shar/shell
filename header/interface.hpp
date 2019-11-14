@@ -42,6 +42,11 @@ private:
 		char* temp = "";
 		int i = base_commands.size() - 1;
 
+		// Currently not handling "echo hello;"
+		if(base_commands[i] == ";"){
+			
+		}
+
 		while(i >= 0)
 		{
 			if(base_commands[i] != ";" || base_commands[i] != "||" || base_commands[i] != "&&")
@@ -72,9 +77,9 @@ private:
 		if(temp != ""){
 			throw "incomplete connector exception"
 			// e.g. "echo hello ||" will crash
-			// as of right now "echo hello;" will also crash
+			// as of right now "echo hello;" will also crash even though it is valid
 		}
-
+		call = Q.front();
 	}
 
 	void parse(char* input){
