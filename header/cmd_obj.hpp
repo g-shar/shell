@@ -1,6 +1,14 @@
 #ifndef __CMD_OBJ_HPP__
 #define __CMD_OBJ_HPP__
 
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string>
+#include <iostream>
+
+
 #include "base_cmd.hpp"
 
 class Cmd_Obj: public Base_Cmd {
@@ -18,7 +26,48 @@ public:
 		}
 	}
 
-	virtual bool doWork(){}
+	virtual bool doWork()
+	{
+		bool process=true;
+	   	int status;
+	   	pid_t pid;
+
+	   	pid=fork();
+
+	   	if(pid==0)
+	   	{ 
+			execvp(this->executable, this->argList);      
+			perror("execvp");
+			exit(1);
+	   	}
+	   	else if(pid==-1)
+	   	{
+			perror("fork");
+			exit(1);
+	   	}
+	   	else
+	   	{
+			waitpid(-1, &status, 0);
+	   	}
+	   	if(WIFEXITED(status))
+	   	{
+		  	if(WEXITSTATUS(status)==0)
+		  	{
+				return true;
+		  	}
+		  	else
+		  	{
+			 	return false;
+		  	}
+	   	}
+   		return false;
+	}
+
+	void printCommands(){
+		for(int i = 0; i < size; ++i){
+			cout << argList[i];
+		}
+	}
 
 private:
 
