@@ -65,16 +65,51 @@ private:
 		void buildTree(vector<char*> base_commands)
 		{
 			Base_Cmd* cur = NULL; 
+			Base_Cmd* temp = NULL;
 			queue<Cmd_Obj*> Q;
 			int i = 0;
 
-			while(i < base_commands.size()){
-				if(checkSemicolon(base_commands[i]))
+			while(i < base_commands.size())
+			{
+
+				if(base_commands[i] != ";" || base_commands[i] != "||" || base_commands[i] != "&&")
 				{
-					base_commands[
+					Q.push_back(new Cmd_Obj(base_commands[i]));
+					++i;
+					continue;
 				}
 
+				else if(checkSemicolon(base_commands[i]))
+				{
+					temp = new Semicolon();
+				}
+				else if(checkOr(base_commands[i]))
+				{
+					temp = new Or();
+				}
+				else{
+					temp = new And();
+				}
+
+				// Initializing root
+				if(call == NULL){
+					call = temp;	
+					cur = call;
+				}
+
+				// Advance tree
+				else{
+					cur->right = temp;
+					cur->left = Q.front();
+					Q.pop();
+					cur = cur->right;
+				}
+				++i;
 			}
+
+			// Closing tree
+			cur->left = Q.front();
+			cur->right = Q.back();
 		}
 
 
