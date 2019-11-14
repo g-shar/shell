@@ -19,18 +19,31 @@ class Interface: public Base_Cmd{
 private:
 	Base_Cmd* call;
 
+	// Helper function (returns the correct connector)
+	Base_Cmd* getConnector(char* sign, Base_Cmd* left, Base_Cmd* right){
+		if(sign == ";"){
+			return new Semicolon(left, right);
+		}
+		else if(sign == "&&"){
+			return new And(left, right);
+		}
+		else if(sign == "||"){
+			return new Or(left, right);
+		}
+		throw "no connector exception";
+	}
+		
+
 
 	// Tree construction with a vector (skewed)
 	void buildTree(vector<char*> base_commands)
 	{
-		Connectors* cur = NULL; 
-		Base_Cmd* temp = NULL;
-		queue<Cmd_Obj*> Q;
-		int i = 0;
+		queue<Base_Cmd*> Q;
+		char* temp = "";
+		int i = base_commands.size() - 1;
 
-		while(i < base_commands.size())
+		while(i >= 0)
 		{
-
 			if(base_commands[i] != ";" || base_commands[i] != "||" || base_commands[i] != "&&")
 			{
 				Q.push(new Cmd_Obj(base_commands[i]));
@@ -38,38 +51,30 @@ private:
 				continue;
 			}
 
-			else if(checkSemicolon(base_commands[i]))
-			{
-				temp = new Semicolon();
-			}
-			else if(checkOr(base_commands[i]))
-			{
-				temp = new Or();
-			}
-			else{
-				temp = new And();
+			else if(temp == ""){
+				temp = base_commands[i];
 			}
 
-			// Initializing root
-			if(call == NULL){
-				call = temp;	
-				cur = call;
+			else{
+				throw "two consecutive connectors exception";
 			}
 
-			// Advance tree
-			else{
-				cur->setRight(temp);
-				cur->setLeft(Q.front());
+			// construct tree bottom up
+			if(Q.size() == 2){
+				Q.push(getConnector(Q.back(), Q.front());
 				Q.pop();
-				cur = cur->right;		// fix this ugly mess later
+				Q.pop();
+				temp = "";
 			}
-
-			++i;
+			--i;
+		}
+		
+		if(temp != ""){
+			throw "incomplete connector exception"
+			// e.g. "echo hello ||" will crash
+			// as of right now "echo hello;" will also crash
 		}
 
-		// Closing tree
-		cur->setLeft(Q.front());
-		cur->setRight(Q.back());
 	}
 
 	void parse(char* input){
@@ -131,9 +136,13 @@ private:
 	}
 
 public:
+	
+
 	Interface(char* cmd){
 		parse(cmd);	
 	}
+
+	Interface(){}
 
 	virtual bool doWork(){
 		return call->doWork();
