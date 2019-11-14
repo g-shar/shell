@@ -9,7 +9,10 @@ public:
    virtual bool doWork();
 
 private:
-   void parse();
+   void parse(){
+
+   }
+
    char* executable;
    char** argList;
 };
