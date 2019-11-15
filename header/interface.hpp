@@ -142,7 +142,7 @@ private:
 
 			// Comment
 			else if(checkComment(input + i) != NULL){
-				break;
+				i = -1;
 			}
 
 			// Any cmd_obj

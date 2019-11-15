@@ -1,10 +1,10 @@
 #include "../header/interface.hpp"
 using namespace std;
 
-const int MAX_CMD = 12;
+const int ARR_SIZE = 12;
 int main(){
 
-	char* text[MAX_CMD];
+	char* text[ARR_SIZE];
 	text[0] = "git clone https://github.com/cs100/assignment-windows-defender.git";
 	text[1] = "cd assignment-windows-defender";
 	text[2] = "git checkout tags/hw2";
@@ -23,7 +23,7 @@ int main(){
 	text[11] = NULL;
 
 	Interface test;
-	for(int i = 0; i < MAX_CMD; ++i){ 
+	for(int i = 0; i < ARR_SIZE; ++i){ 
 		test.setCommand(text[i]);
 		test.doWork();
 	}

@@ -73,10 +73,10 @@ public:
 
 	static char* checkComment(char* phrase)
 	{
-		if(phrase[0] != '#'){
-			return NULL;
+		if(phrase[0] == '#'){
+			return phrase;
 		}
-		return phrase;
+		return NULL;
 	}
 
 	static char* checkCommand(char* phrase)
