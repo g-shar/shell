@@ -4,19 +4,21 @@
 
 using namespace std;
 
-const int MAX_CMD = 11;
-
-
 int main(){
-	Interface menu;
-	char cstr[300] = {};
+	Interface rshell;
+	char cstr[100] = {};
 	while(true){
 
-		cout << "$ ";
-		cin.getline(cstr, sizeof(cstr), '\n');
+		try{
+			cout << "$ ";
+			cin.getline(cstr, sizeof(cstr), '\n');
 		
-		menu.setCommand(cstr);
-		menu.doWork();
+			rshell.setCommand(cstr);
+			rshell.doWork();
+		}
+		catch(const char* error){
+			cout << error;
+		}
 	}
 }
 

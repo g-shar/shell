@@ -87,6 +87,17 @@ private:
 		call = Q.front();
 	}
 
+	// if receiving input from cmd prompt
+	void parse(int argv, char** argc){
+		vector<char*> base_commands;	
+		for(int i = 0; i < argv; ++i){
+			cout << i << " => "  << argc[i] << endl;
+			base_commands.push_back(argc[i]);
+		}	
+		buildTree(base_commands);
+	}
+
+	// if receiving general input
 	void parse(char* input){
 		vector<char*> base_commands;	//	Vector of commands
 		char* hold = NULL;				//  For copying cstrings
@@ -161,6 +172,10 @@ public:
 
 	void setCommand(char* cmd){
 		parse(cmd);
+	}
+
+	void setCommand(int argv, char** argc){
+		parse(argv, argc);
 	}
 
 	virtual bool doWork(){

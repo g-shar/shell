@@ -17,6 +17,10 @@ ADD_EXECUTABLE( rshell
 	src/rshell.cpp
 )
 
+ADD_EXECUTABLE( integration_tests/rshell_int
+	src/rshell_int.cpp
+)
+
 TARGET_INCLUDE_DIRECTORIES(test
    PRIVATE
       ${PROJECT_SOURCE_DIR}/unit_tests     

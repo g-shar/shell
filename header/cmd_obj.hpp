@@ -102,7 +102,7 @@ private:
 				length = sizeArg(cmd + i);
 			}
 
-			vList.push_back(Base_Cmd::newStrCpy(cmd + i, length));
+			vList.push_back(newStrCpy(cmd + i, length));
 
 
 			i += length;
@@ -117,7 +117,7 @@ private:
 		for(int k = 0; k < size; ++k){
 			argList[k] = vList[k];
 		}
-		argList[size + 1] = "\0";
+		argList[size] = '\0';
 		executable = argList[0];
 
   	}
