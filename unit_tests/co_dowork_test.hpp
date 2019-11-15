@@ -6,7 +6,7 @@
 
 TEST(Cmd_ObjTestSet, EchoTest) {
    char* argList[5];
-   const char* cmd="echo";
+   char* cmd="echo";
 
    argList[0]="echo";
    argList[1]="hello";
@@ -21,7 +21,7 @@ TEST(Cmd_ObjTestSet, EchoTest) {
 
 TEST(Cmd_ObjTestSet, lsTest) {
    char* argList[2];
-   const char* cmd="ls";
+   char* cmd="ls";
 
    argList[0]="ls";
    argList[1]=NULL;
@@ -33,7 +33,7 @@ TEST(Cmd_ObjTestSet, lsTest) {
 
 TEST(Cmd_ObjTestSet, gitBranchTest) {
    char* argList[3];
-   const char* cmd="git";
+   char* cmd="git";
 
    argList[0]="git";
    argList[1]="branch";
@@ -46,7 +46,7 @@ TEST(Cmd_ObjTestSet, gitBranchTest) {
 
 TEST(Cmd_ObjTestSet, ExecuteFailTest) {
    char* argList[5];
-   const char* cmd="eho";
+   char* cmd="eho";
 
    argList[0]="eho";
    argList[1]="hello";

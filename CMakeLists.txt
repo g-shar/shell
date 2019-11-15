@@ -13,12 +13,6 @@ ADD_EXECUTABLE( test
    unit_tests/unit_test.cpp 
 )
 
-ADD_EXECUTABLE( rshell
-	test.cpp
-)
-
-
-
 #TARGET_INCLUDE_DIRECTORIES(test
 #   PRIVATE
 #      ${PROJECT_SOURCE_DIR}/unit_tests     

@@ -4,7 +4,7 @@
 #include "../header/semicolon.hpp"
 
 TEST(SemicolonTestSet, twoCommandSuccessTest) {
-   const char* argList[5];
+   char* argList[5];
    char* cmd="echo";
    
    argList[0]="echo";
@@ -13,7 +13,7 @@ TEST(SemicolonTestSet, twoCommandSuccessTest) {
    argList[3]="goodbye";
    argList[4]=NULL;
   
-   const char* cmd2="ls"; 
+   char* cmd2="ls"; 
    char* argList2[2];
    
    argList2[0]="ls";
