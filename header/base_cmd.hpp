@@ -81,7 +81,7 @@ public:
 
 	static char* checkCommand(char* phrase)
 	{
-		if(!(checkSemicolon(phrase) || checkOr(phrase) || checkAnd(phrase))){
+		if(!(checkSemicolon(phrase) || checkOr(phrase) || checkAnd(phrase) || checkComment(phrase))){
 			return phrase;
 		}
 		return NULL;
@@ -133,9 +133,7 @@ public:
 		int i = 0;
 		while(phrase[i] != '\0')
 		{
-			if((checkSemicolon(phrase + i) != NULL) ||
-			   (checkAnd(phrase + i) != NULL) ||
-			   (checkOr(phrase + i) != NULL))
+			if(!checkCommand(phrase + i))
 			{
 				return i;
 			}
