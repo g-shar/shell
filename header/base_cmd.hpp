@@ -81,7 +81,10 @@ public:
 
 	static char* checkCommand(char* phrase)
 	{
-		return !(checkSemicolon(phrase) || checkOr(phrase) || checkAnd(phrase));
+		if(!(checkSemicolon(phrase) || checkOr(phrase) || checkAnd(phrase))){
+			return phrase;
+		}
+		return NULL;
 	}
 
 
@@ -144,9 +147,9 @@ public:
 	// Finds the length from current pointer to end of string
 	static int sizeEnd(char* phrase){
 		int i = 0;
-		while(phrase[i]!= '\0')
+		while(phrase[i] != '\0')
 		{
-a			++i;
+			++i;
 		}
 		return i;
 	}

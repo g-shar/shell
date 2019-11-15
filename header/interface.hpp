@@ -57,7 +57,7 @@ private:
 		while(i >= 0)
 		{	
 			// If command, push to queue
-			if(checkCommand(base_commands[i])
+			if(checkCommand(base_commands[i]))
 			{
 				Q.push(new Cmd_Obj(base_commands[i]));
 			}
