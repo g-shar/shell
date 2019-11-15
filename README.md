@@ -13,9 +13,9 @@ This project is a command shell that prints a command prompt, reads in a line of
 
 # Classes
 
-## Full_Cmd
+## Interface
 
-Full_Cmd is the interface used to encapsulate the program, and where the command is parsed in order to help form the part-whole hierarchy of Base_Cmd pointers. The interface also contains an execute command, which uses the tree formed from Connectors and Cmd_Obj to run the full command inputted by the user.
+The class Interface is used to encapsulate the program, and where the command is parsed in order to help form the part-whole hierarchy of Base_Cmd pointers. The interface also contains an execute command, which uses the tree formed from Connectors and Cmd_Obj to run all the commands and connectors inputted by the user.
 
 ## Base_Cmd
 
