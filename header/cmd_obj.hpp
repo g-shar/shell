@@ -32,28 +32,30 @@ public:
 	   	pid_t pid;
 
 	   	pid=fork();
+	
+		// Exit catch
+		if(std::strstr(this->executable, "exit")){
+			exit(1);	
+		}
 
-	   	if(pid==0)
+		else if(pid==0)
 	   	{ 
-			/*
-			for(int i = 0; i < size; ++i){
-				cout << argList[i] << " ";
-			}
-			*/
-
 			execvp(this->executable, this->argList);      
 			perror("execvp");
 			exit(1);
 	   	}
+
 	   	else if(pid==-1)
 	   	{
 			perror("fork");
 			exit(1);
 	   	}
+
 	   	else
 	   	{
 			waitpid(-1, &status, 0);
 	   	}
+
 	   	if(WIFEXITED(status))
 	   	{
 		  	if(WEXITSTATUS(status)==0)

@@ -43,27 +43,36 @@ private:
 		char* temp = NULL;
 		int i = base_commands.size() - 1;
 
-		// Currently not handling "echo hello;"
-		if(base_commands[i] == ";"){
+		// just a single connector error
+		if(!checkCommand(base_commands[i]) && i == 0){
+			throw "just a connector exception";	
+		}
 
+		// handles ending semicolon case
+		else if(checkSemicolon(base_commands[i]) && checkCommand(base_commands[i-1])){
+			Q.push(getConnector(base_commands[i], new Cmd_Obj(base_commands[i-1]), NULL));
+			i-=2;
 		}
 
 		while(i >= 0)
-		{
-			if(!(checkSemicolon(base_commands[i]) || checkOr(base_commands[i]) || checkAnd(base_commands[i])))
+		{	
+			// If command, push to queue
+			if(checkCommand(base_commands[i]))
 			{
-				// cout << "Base Command: " << base_commands[i] << " is pushed up => Queue size: " << Q.size() << endl;
 				Q.push(new Cmd_Obj(base_commands[i]));
 			}
 
+			// if connector, store temporarily
 			else if(temp == NULL){
 				temp = base_commands[i];
 			}
 
+			// if double connectors, throw exception
 			else{
 				throw "two consecutive connectors exception";
 			}
 
+			// Once there are 2 items in queue, connect & create tree
 			if(Q.size() == 2){
 				Q.push(getConnector(temp, Q.back(), Q.front()));
 				Q.pop();
@@ -74,13 +83,7 @@ private:
 			--i;
 		}
 		
-		/*
-		if(temp != NULL){
-			throw "incomplete connector exception";
-			// e.g. "echo hello ||" will crash
-			// as of right now "echo hello;" will also crash even though it is valid
-		}
-		*/
+		// sets the root node to the front of the queue
 		call = Q.front();
 	}
 
@@ -95,40 +98,45 @@ private:
 		while(input[i] != '\0')
 		{
 			// Semicolons
-			if(Base_Cmd::checkSemicolon(input + i) != NULL)
+			if(checkSemicolon(input + i) != NULL)
 			{
 				length = 1;
-				hold = Base_Cmd::newStrCpy(input + i, length);
+				hold = newStrCpy(input + i, length);
 				base_commands.push_back(hold);
 				i += length;
 			}
 
 			// Ands
-			else if(Base_Cmd::checkAnd(input + i) != NULL)
+			else if(checkAnd(input + i) != NULL)
 			{
 				length = 2;
-				hold = Base_Cmd::newStrCpy(input + i, length);
+				hold = newStrCpy(input + i, length);
 				base_commands.push_back(hold);
 				i += length;			
 			}
 			
 			// Ors
-			else if(Base_Cmd::checkOr(input + i) != NULL)
+			else if(checkOr(input + i) != NULL)
 			{
 				length = 2;
-				hold = Base_Cmd::newStrCpy(input + i, length);
+				hold = newStrCpy(input + i, length);
 				base_commands.push_back(hold);
 				i += length;
 			}
 
 			// Space
-			else if(Base_Cmd::checkSpace(input + i) != NULL){
+			else if(checkSpace(input + i) != NULL){
 				++i;
+			}
+
+			// Comment
+			else if(checkComment(input + i) != NULL){
+				break;
 			}
 
 			// Any cmd_obj
 			else{
-				int length = sizeCmdObj(input + i);	
+				length = sizeCmdObj(input + i);	
 				hold = newStrCpy(input + i, length);
 				base_commands.push_back(hold);
 				i += length;
