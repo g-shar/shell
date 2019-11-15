@@ -9,7 +9,7 @@ Gregory Shar 862087118<br/>
 This project is a command shell that prints a command prompt, reads in a line of commands and connectors from standard input, and executes the appropriate commands using fork, execvp, and waitpid. The program accomplishes this by first creating multiple command objects for each user-inputted command that each contain the executable in string form and an array of tje passed in arguments that have been parsed already. The program then uses a composite pattern to create a tree composed of these command objects and connector objects, with the command objects as the primitives and the connector objects as the composites. The program then traverses the tree, using a doWork() funciton in order to go through any input connectors and command objects to determine what commands should or should not be executed based on previous commands, and to execute the commands themselves.
 
 # Diagram
-![OMT Diagram](https://github.com/cs100/assignment-windows-defender/blob/master/images/RShell_Diagram.png?raw=true)
+![RShell Diagram](https://user-images.githubusercontent.com/46507098/68909726-2ded2000-0704-11ea-928a-7237b4acd066.jpg)
 
 # Classes
 
