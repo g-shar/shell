@@ -71,6 +71,18 @@ public:
 		return phrase;
 	}
 
+	static char* checkComment(char* phrase)
+	{
+		if(phrase[0] != '#'){
+			return NULL;
+		}
+		return phrase;
+	}
+
+	static char* checkCommand(char* phrase)
+	{
+		return !(checkSemicolon(phrase) || checkOr(phrase) || checkAnd(phrase));
+	}
 
 
 	/*******************************
@@ -92,7 +104,7 @@ public:
 		exit(1);
 	}
 
-	// Finds the size of the command
+	// Finds the size of ONE argument
 	static int sizeArg(char* phrase)
 	{
 		int i = 0;
@@ -111,7 +123,8 @@ public:
 		return i;
 
 	}
-
+	
+	// Finds the size of an ENTIRE command
 	static int sizeCmdObj(char* phrase)
 	{
 		int i = 0;
@@ -128,6 +141,15 @@ public:
 		return i;
 	}
 
+	// Finds the length from current pointer to end of string
+	static int sizeEnd(char* phrase){
+		int i = 0;
+		while(phrase[i]!= '\0')
+		{
+a			++i;
+		}
+		return i;
+	}
 
 	// Dynamically allocates a new cstring to copy over data
 	static char* newStrCpy(char* phrase, int size)
