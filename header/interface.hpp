@@ -22,47 +22,38 @@ private:
 	// Helper function (returns the correct connector)
 	Base_Cmd* getConnector(char* sign, Base_Cmd* left, Base_Cmd* right){
 		if(checkSemicolon(sign)){
+			// cout << "Semicolon" << endl;
 			return new Semicolon(left, right);
 		}
 		else if(checkAnd(sign)){
+			// cout << "And" << endl;
 			return new And(left, right);
 		}
 		else if(checkOr(sign)){
+			// cout << "Or" << endl;
 			return new Or(left, right);
 		}
 		throw "no connector exception";
 	}
 		
-
-
 	// Tree construction with a vector (skewed)
 	void buildTree(vector<char*> base_commands)
 	{
-
 		queue<Base_Cmd*> Q;
 		char* temp = NULL;
 		int i = base_commands.size() - 1;
 
 		// Currently not handling "echo hello;"
 		if(base_commands[i] == ";"){
-		
+
 		}
 
 		while(i >= 0)
 		{
-			// construct tree bottom up
-			if(Q.size() == 2){
-				Q.push(getConnector(temp, Q.back(), Q.front()));
-				Q.pop();
-				Q.pop();
-				temp = NULL;
-			}
-
 			if(!(checkSemicolon(base_commands[i]) || checkOr(base_commands[i]) || checkAnd(base_commands[i])))
 			{
+				// cout << "Base Command: " << base_commands[i] << " is pushed up => Queue size: " << Q.size() << endl;
 				Q.push(new Cmd_Obj(base_commands[i]));
-				--i;
-				continue;
 			}
 
 			else if(temp == NULL){
@@ -73,6 +64,12 @@ private:
 				throw "two consecutive connectors exception";
 			}
 
+			if(Q.size() == 2){
+				Q.push(getConnector(temp, Q.back(), Q.front()));
+				Q.pop();
+				Q.pop();
+				temp = NULL;
+			}
 
 			--i;
 		}
@@ -84,7 +81,6 @@ private:
 			// as of right now "echo hello;" will also crash even though it is valid
 		}
 		*/
-
 		call = Q.front();
 	}
 

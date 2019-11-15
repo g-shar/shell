@@ -35,6 +35,12 @@ public:
 
 	   	if(pid==0)
 	   	{ 
+			/*
+			for(int i = 0; i < size; ++i){
+				cout << argList[i] << " ";
+			}
+			*/
+
 			execvp(this->executable, this->argList);      
 			perror("execvp");
 			exit(1);

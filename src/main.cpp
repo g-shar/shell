@@ -1,7 +1,7 @@
 #include "../header/interface.hpp"
 using namespace std;
 
-const int MAX_CMD = 11;
+const int MAX_CMD = 12;
 int main(){
 
 	char* text[MAX_CMD];
@@ -16,10 +16,11 @@ int main(){
 	  	   section of the specifications\"";
 	text[8] = "test -e test || echo \"test executable missing, check submission instruction\
 	  	   section of the specifications\"";
-	text[9] = "test -d unit_tests || echo \"unit_tests/ directory missing, check submission instruction\
+	text[9] = "test -d unit_tests/ || echo \"unit_tests/ directory missing, check submission instruction\
 	  		section of the specifications\"";
-	text[10] = "test -d integration_tests || echo \"integration_tests/ directory missing, check submission\
+	text[10] = "test -d integration_tests/ || echo \"integration_tests/ directory missing, check submission\
 					instruction section of the specifications\"";
+	text[11] = NULL;
 
 	Interface test;
 	for(int i = 0; i < MAX_CMD; ++i){ 
