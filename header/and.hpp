@@ -11,6 +11,7 @@ public:
 	
 	And():Connectors(NULL, NULL){}
    	And(Base_Cmd* left, Base_Cmd* right): Connectors(left, right){}
+
    	virtual bool doWork(){
    	   if(left->doWork()==true)
    	   {

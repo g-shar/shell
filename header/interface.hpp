@@ -90,10 +90,14 @@ private:
 	// if receiving input from cmd prompt
 	void parse(int argv, char** argc){
 		vector<char*> base_commands;	
-		for(int i = 0; i < argv; ++i){
+		int i;
+		for(i = 0; argc[i] != NULL; ++i){
 			cout << i << " => "  << argc[i] << endl;
 			base_commands.push_back(argc[i]);
 		}	
+
+		base_commands.push_back(NULL);
+
 		buildTree(base_commands);
 	}
 
@@ -108,6 +112,7 @@ private:
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
+
 			// Semicolons
 			if(checkSemicolon(input + i) != NULL)
 			{
@@ -169,6 +174,10 @@ public:
 	}
 
 	Interface(){}
+
+	Interface(int argv, char** argc){
+		parse(argv, argc);
+	}
 
 	void setCommand(char* cmd){
 		parse(cmd);
