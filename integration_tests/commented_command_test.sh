@@ -5,7 +5,7 @@ TESTS=("ls #-a" "echo yes #&& git status" "git branch #newBranch;" )
 for input in "${TESTS[@]}"
 do
    echo "CommentedCommands test with ${input}"
-   echo $(./rshell ${input}) > integration_tests.txt
+   echo $(./../rshell ${input}) > integration_tests.txt
    EXECUTION=$?
    if [ $EXECUTION -eq 0 ];
    then
