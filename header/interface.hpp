@@ -91,14 +91,15 @@ private:
 	void parse(int argv, char** argc){
 		vector<char*> base_commands;	
 		int i;
+
 		for(i = 0; argc[i] != NULL; ++i){
-			cout << i << " => "  << argc[i] << endl;
 			base_commands.push_back(argc[i]);
 		}	
 
+		// for safety premeasures but it seems like main args includes NULL
 		base_commands.push_back(NULL);
-
-		buildTree(base_commands);
+		printV(base_commands);
+		// buildTree(base_commands);
 	}
 
 	// if receiving general input
@@ -112,6 +113,7 @@ private:
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
+			cout << "Iteration => " << i << endl;
 
 			// Semicolons
 			if(checkSemicolon(input + i) != NULL)
@@ -159,9 +161,11 @@ private:
 			}
 
 		}
-	
+
+		base_commands.push_back(NULL);
+		printV(base_commands);
 		// Constructs the tree
-		buildTree(base_commands);
+		// buildTree(base_commands);
 
 		/* TEST */
 		// printV(base_commands);
@@ -193,6 +197,7 @@ public:
 
 	/* Test functions */
 	void printV(vector<char*> temp){
+		cout << "This vector contains: " << endl;
 		for(auto x: temp){
 			cout << x << endl;
 		}

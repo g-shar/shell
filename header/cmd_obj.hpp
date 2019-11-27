@@ -109,7 +109,6 @@ private:
 			++j;
 		}
 
-		cmd = vList[0];
 		size = j;
 		argList = new char*[size + 1];		// account for null termination entry
 		
@@ -117,7 +116,7 @@ private:
 		for(int k = 0; k < size; ++k){
 			argList[k] = vList[k];
 		}
-		argList[size] = '\0';
+		argList[size] = NULL;
 		executable = argList[0];
 
   	}
