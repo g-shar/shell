@@ -34,6 +34,6 @@ int main(int argv, char** argc){
 	rshell_cmd.setCommand(argv, argc);
 //	rshell_cmd.setCommand(argv, arg_alt);
 //	rshell_cstr.setCommand(cmd);
-//	rshell_cmd.doWork();
+	rshell_cmd.doWork();
 }
 
