@@ -40,17 +40,34 @@ private:
 	vector<char*> buildPostFix(vector<char*> base_commands){
 		vector<char*> postFixVector;
 		stack<char*> hold;
+		int pars = 0;
 
 		for(int i = 0; i < base_commands.size(); ++i){
 
-			// If operand, push right to new vector
-			if(checkCommand(base_commands[i])){
+			// If open parens
+			if(*base_commands[i] == '('){
+				++pars;				
+				hold.push(base_commands[i]);
+			}
+
+			// If closed parens
+			else if(*base_commands[i] == ')'){
+				while(*hold.top() != '('){
+					postFixVector.push_back(hold.top());
+					hold.pop();
+				}
+				hold.pop();	// get rid of that last parens
+				--pars;
+			}
+
+			// If Operand
+			else if(checkCommand(base_commands[i])){
 				postFixVector.push_back(base_commands[i]);	
 			}
 
-			// If operator, push to stack and replace previous if no other operator
+			// If operator, push to stack and replace previous if no other operator / no cur parens
 			else{
-				if(!hold.empty() && checkOperator(hold.top())){
+				if(!hold.empty() && !pars){
 					postFixVector.push_back(hold.top());
 					hold.pop();
 				}
@@ -175,23 +192,43 @@ private:
 
 		// Calls an already implemented parse
 		this->parse(input);
-		// buildTree(base_commands);
 	}
 
 	// if receiving general input
 	void parse(char* input){
+		stack<char> closer;				//  Stack keeps track of parens
 		vector<char*> base_commands;	//	Vector of commands
-		char* hold = NULL;		//  For copying cstrings
-		int length = 0;			//	To help determine quote / string size
-		int i = 0;			//	Iterating value for input
+		char* hold = NULL;				//  For copying cstrings
+		int length = 0;					//	To help determine quote / string size
+		int i = 0;						//	Iterating value for input
 
 		
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
 
+			// Parentheses
+			if(checkPar(input + i) != NULL)
+			{
+				if(input[i] == '('){
+					closer.push(input[i]);
+				}				
+
+				else if(closer.empty() || closer.top() != '('){
+					throw "Unclosed Parentheses error!";
+				}
+				else{
+					closer.pop();
+				}
+
+				length = 1;
+				hold = newStrCpy(input + i, length);
+				base_commands.push_back(hold);
+				i += length;
+			}
+
 			// Semicolons
-			if(checkSemicolon(input + i) != NULL)
+			else if(checkSemicolon(input + i) != NULL)
 			{
 				length = 1;
 				hold = newStrCpy(input + i, length);
@@ -237,9 +274,16 @@ private:
 
 		}
 
+		// check for unclosed parentheses
+		if(!closer.empty()){
+			throw "Unclosed Parentheses!";
+		}
+
+		// reorder the vector to postfix
 		vector<char*> postFix = buildPostFix(base_commands);
 
 	
+		// build the tree!
 		buildTree2(postFix);
 
 
