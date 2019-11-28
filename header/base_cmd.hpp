@@ -14,6 +14,15 @@ public:
 
 	/** Static Helper Functions **/
 	
+	static bool checkTest(char** argList, int size){
+		int a = size - 1;
+		int b = strlen(argList[a]) - 1;
+		if(argList[0][0] == '[' && argList[a][b] == ']'){
+			return true;
+		}
+		return false;
+	}
+
 	static char* checkSpace(char* phrase)
 	{
 		if(*phrase == ' ')
@@ -177,6 +186,8 @@ public:
 			delete []x;
 		}
 	}
+
+
 };
 
 #endif

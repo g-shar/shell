@@ -37,7 +37,7 @@ public:
 		}
 		else if(pid==0)
 	   	{
-			if(std::strstr(this->executable, "test"))
+			if(std::strstr(this->executable, "test") || checkTest(argList, size))
 			{
 				//checks if test has a flag or a given path
 				if(size>=2)
