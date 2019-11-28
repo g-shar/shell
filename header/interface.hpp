@@ -2,10 +2,11 @@
 #define __INTERFACE_HPP__
 
 
-#include <queue>
+#include <stack>
 #include <vector>
 #include <iostream>
 #include <cstring>
+#include <queue>
 using namespace std;
 
 #include "base_cmd.hpp"
@@ -35,6 +36,61 @@ private:
 		}
 		throw "no connector exception";
 	}
+
+	vector<char*> buildPostFix(vector<char*> base_commands){
+		vector<char*> postFixVector;
+		stack<char*> hold;
+
+		for(int i = 0; i < base_commands.size(); ++i){
+
+			// If operand, push right to new vector
+			if(checkCommand(base_commands[i])){
+				postFixVector.push_back(base_commands[i]);	
+			}
+
+			// If operator, push to stack and replace previous if no other operator
+			else{
+				if(checkOperator(hold.top())){
+					postFixVector.push_back(hold.top());
+					hold.pop();
+				}
+				hold.push(base_commands[i]);
+			}
+		}
+		return postFixVector;
+	}
+
+	
+	void buildTree2(vector<char*> base_commands)
+	{
+
+		stack<Base_Cmd*> tree;
+		Base_Cmd* leftLeaf;
+		Base_Cmd* rightLeaf;
+		Base_Cmd* center;
+		
+		
+		for(int i = 0; i < base_commands.size(); ++i){
+
+			// Push new command object onto stack
+			if(checkCommand(base_commands[i])){
+				tree.push(new Cmd_Obj(base_commands[i]));	
+			}
+
+			// Destack base commands from stack and attach to operator before pushing onto stack again
+			else if(checkOperator(base_commands[i])){
+				rightLeaf = tree.top();
+				tree.pop();
+				leftLeaf = tree.top();
+				tree.pop();
+				center = getConnector(base_commands[i], leftLeaf, rightLeaf);
+				tree.push(center);
+			}
+		}
+
+		call = tree.top();
+	}
+
 		
 	// Tree construction with a vector (skewed)
 	void buildTree(vector<char*> base_commands)
@@ -89,20 +145,34 @@ private:
 
 	// if receiving input from cmd prompt
 	void parse(int argv, char** argc){
-		vector<char*> base_commands;	
-		for(int i = 0; i < argv; ++i){
-			cout << i << " => "  << argc[i] << endl;
-			base_commands.push_back(argc[i]);
-		}	
-		buildTree(base_commands);
+		char* input = NULL;
+		int i, sum = 0;
+
+		// Get size of arguments
+		for(i = 1; argc[i]; ++i){
+			sum += strlen(argc[i]);		
+			++sum;
+		}
+
+		input = new char[sum];
+
+		// Stack all arguments into 1 cstring
+		for(i = 1; argc[i]; ++i){
+			strcat(input, argc[i]);
+			strcat(input, " ");
+		}
+
+		// Calls an already implemented parse
+		this->parse(input);
+		// buildTree(base_commands);
 	}
 
 	// if receiving general input
 	void parse(char* input){
 		vector<char*> base_commands;	//	Vector of commands
-		char* hold = NULL;				//  For copying cstrings
-		int length = 0;					//	To help determine quote / string size
-		int i = 0;						//	Iterating value for input
+		char* hold = NULL;		//  For copying cstrings
+		int length = 0;			//	To help determine quote / string size
+		int i = 0;			//	Iterating value for input
 
 		
 		/** Puts all connectors & command objects in vector **/
@@ -142,7 +212,7 @@ private:
 
 			// Comment
 			else if(checkComment(input + i) != NULL){
-				i = -1;
+				break;
 			}
 
 			// Any cmd_obj
@@ -154,12 +224,11 @@ private:
 			}
 
 		}
-	
-		// Constructs the tree
-		buildTree(base_commands);
 
-		/* TEST */
-		// printV(base_commands);
+		// Constructs the tree
+		buildTree2(base_commands);
+
+
 	}
 
 public:
@@ -169,6 +238,10 @@ public:
 	}
 
 	Interface(){}
+
+	Interface(int argv, char** argc){
+		parse(argv, argc);
+	}
 
 	void setCommand(char* cmd){
 		parse(cmd);
@@ -184,6 +257,7 @@ public:
 
 	/* Test functions */
 	void printV(vector<char*> temp){
+		cout << "This vector contains: " << endl;
 		for(auto x: temp){
 			cout << x << endl;
 		}

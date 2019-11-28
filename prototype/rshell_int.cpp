@@ -4,13 +4,35 @@
 
 using namespace std;
 
+void print(int argv, char** argc){
+	for(int i = 0; i < argv; ++i){
+		cout << i << " => " << argc[i] << endl;
+	}
+}
+
 int main(int argv, char** argc){
-	Interface rshell;
 
-	char* NT = '\0';
 
-	argc[argv] = NT;
-	rshell.setCommand(argv, argc + 1);
-	rshell.doWork();
+
+	char* cmd = "echo hello world";
+	char* arg_alt[] = {"./rshell_int", "echo", "hello", "world", NULL};
+
+	/*
+	cout << "custom line args" << endl;
+	print(4, arg_alt);
+	cout << "cmd line args" << endl;
+	print(argv, argc);
+	*/
+
+
+	Interface rshell_cmd;
+
+	//rshell_cmd.setCommand(cmd);
+	//rshell_cmd.doWork();
+
+	rshell_cmd.setCommand(argv, argc);
+//	rshell_cmd.setCommand(argv, arg_alt);
+//	rshell_cstr.setCommand(cmd);
+	rshell_cmd.doWork();
 }
 

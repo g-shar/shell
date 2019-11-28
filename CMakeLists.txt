@@ -17,8 +17,8 @@ ADD_EXECUTABLE( rshell
 	src/rshell.cpp
 )
 
-ADD_EXECUTABLE( grading
-	src/grading.cpp
+ADD_EXECUTABLE( practice
+	prototype/rshell_int.cpp
 )
 
 TARGET_INCLUDE_DIRECTORIES(test
