@@ -34,7 +34,9 @@ private:
 			// cout << "Or" << endl;
 			return new Or(left, right);
 		}
-		throw "no connector exception";
+		throw "getConnector: Nonexistent connector!\n \
+			   Line 37 from interface.hpp";
+		exit(1);
 	}
 
 	vector<char*> buildPostFix(vector<char*> base_commands){
@@ -115,57 +117,6 @@ private:
 		call = tree.top();
 	}
 
-		
-	// Tree construction with a vector (skewed)
-	void buildTree(vector<char*> base_commands)
-	{
-		queue<Base_Cmd*> Q;
-		char* temp = NULL;
-		int i = base_commands.size() - 1;
-
-		// just a single connector error
-		if(!checkCommand(base_commands[i]) && i == 0){
-			throw "just a connector exception";	
-		}
-
-		// handles ending semicolon case
-		else if(checkSemicolon(base_commands[i]) && checkCommand(base_commands[i-1])){
-			Q.push(getConnector(base_commands[i], new Cmd_Obj(base_commands[i-1]), NULL));
-			i-=2;
-		}
-
-		while(i >= 0)
-		{	
-			// If command, push to queue
-			if(checkCommand(base_commands[i]))
-			{
-				Q.push(new Cmd_Obj(base_commands[i]));
-			}
-
-			// if connector, store temporarily
-			else if(temp == NULL){
-				temp = base_commands[i];
-			}
-
-			// if double connectors, throw exception
-			else{
-				throw "two consecutive connectors exception";
-			}
-
-			// Once there are 2 items in queue, connect & create tree
-			if(Q.size() == 2){
-				Q.push(getConnector(temp, Q.back(), Q.front()));
-				Q.pop();
-				Q.pop();
-				temp = NULL;
-			}
-
-			--i;
-		}
-		
-		// sets the root node to the front of the queue
-		call = Q.front();
-	}
 
 	// if receiving input from cmd prompt
 	void parse(int argv, char** argc){
@@ -216,7 +167,9 @@ private:
 
 				// If closed without an open parentheses
 				else if(closer == 0){
-					throw "Unclosed parentheses error!";
+					throw "parse: Unclosed parentheses error!\n \
+						   Line 171 from interface.hpp";
+					exit(1);
 				}
 
 				// If closed parentheses
@@ -279,7 +232,9 @@ private:
 
 		// check for unclosed parentheses
 		if(closer != 0){
-			throw "Unclosed Parentheses!";
+			throw "parse: Unclosed Parentheses!\n \
+				   Line 235 from interface.hpp";
+			exit(1);
 		}
 
 		// reorder the vector to postfix

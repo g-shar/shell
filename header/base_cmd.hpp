@@ -59,6 +59,9 @@ public:
 		
 		// Just one ampersand throws an error
 		else if(phrase[0] == '&'){
+
+			throw "checkAnd: Single Ampersand Error!\n \
+				   Line 63 of base_cmd.hpp";
 			exit(1);
 		}
 
@@ -75,7 +78,8 @@ public:
 
 		// Just one pipe throws an error
 		else if(phrase[0] == '|'){
-			cout << "Single Pipe Error!" << endl;
+			throw "checkOr: Single Pipe Error!\n \
+				   Line 78 of base_cmd.hpp";
 			exit(1);
 		}
 		return NULL;
@@ -135,7 +139,8 @@ public:
 		}
 			
 		//	error from unfinished quote
-		throw "Unfinished string literal exception";
+		throw "sizeQuote: Unfinished string literal exception\n \
+			   Line 138 of base_cmd.hpp";
 		exit(1);
 	}
 
