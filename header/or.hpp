@@ -11,9 +11,9 @@ public:
    	virtual bool doWork(){
    	   if(left->doWork()==false)
    	   {
-   	      return right->doWork();
+		   return right->doWork();
    	   }
-   	   return false;
+   	   return true;
    	}
 };
 
