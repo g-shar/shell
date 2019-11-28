@@ -17,7 +17,14 @@ public:
 		parse(cmd);		
 	}
 
-	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list){};
+	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list){
+		int sz=0;
+                while(argList[sz]!=NULL)
+		{
+			sz+=1;
+		}
+		this->size=sz;
+	};
 
 	~Cmd_Obj(){
 		for(int i = 0; i < size; ++i)
@@ -37,7 +44,7 @@ public:
 		}
 		else if(pid==0)
 	   	{
-			if(std::strstr(this->executable, "test") || checkTest(argList, size))
+			if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
 			{
 				//checks if test has a flag or a given path
 				if(size>=2)
