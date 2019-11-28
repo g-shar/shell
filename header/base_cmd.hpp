@@ -87,6 +87,14 @@ public:
 		return NULL;
 	}
 
+	static char* checkOperator(char* phrase){
+		if(checkSemicolon(phrase) || checkOr(phrase) || checkAnd(phrase)){
+			return phrase;
+		}
+		return NULL;
+	}
+
+
 
 	/*******************************
 	 *SPECIAL HELPER FUNCTIONS

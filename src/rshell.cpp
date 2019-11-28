@@ -9,18 +9,18 @@ int main(int argv, char** argc){
 	char cstr[100] = {};
 	
 	try{
-	if(argv > 1){
-		while(true){
-			cout << "$ ";
-			cin.getline(cstr, sizeof(cstr), '\n');
-			rshell.setCommand(cstr);
+		if(argv == 1){
+			while(true){
+				cout << "$ ";
+				cin.getline(cstr, sizeof(cstr), '\n');
+				rshell.setCommand(cstr);
+				rshell.doWork();
+			}
+		}
+		else{
+			rshell.setCommand(argv, argc);
 			rshell.doWork();
 		}
-	}
-	else{
-		rshell.setCommand(argv, argc);
-		rshell.doWork();
-	}
 	}
 	catch(const char* error){
 		cout << error;
