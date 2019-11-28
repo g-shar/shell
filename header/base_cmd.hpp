@@ -23,6 +23,15 @@ public:
 		return false;
 	}
 
+	static char* checkPar(char* phrase)
+	{
+		if(*phrase == '(' || *phrase == ')')
+		{
+			return phrase;
+		}
+		return NULL;
+	}
+
 	static char* checkSpace(char* phrase)
 	{
 		if(*phrase == ' ')
