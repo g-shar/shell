@@ -17,10 +17,6 @@ ADD_EXECUTABLE( rshell
 	src/rshell.cpp
 )
 
-ADD_EXECUTABLE( grading
-	src/grading.cpp
-)
-
 TARGET_INCLUDE_DIRECTORIES(test
    PRIVATE
       ${PROJECT_SOURCE_DIR}/unit_tests     
