@@ -39,3 +39,6 @@ CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
 Makefile
+
+#Text files
+integration_tests.txt
