@@ -1,6 +1,7 @@
 #ifndef __BASE_CMD_HPP__
 #define __BASE_CMD_HPP__
 
+#include <cstdlib>
 #include <cstring>
 #include <vector>
 using namespace std;
