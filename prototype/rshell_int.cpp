@@ -14,8 +14,8 @@ int main(int argv, char** argc){
 
 
 
-	char* cmd = "echo hello world";
-	char* arg_alt[] = {"./rshell_int", "echo", "hello", "world", NULL};
+	char* cmd = "echo hi && echo hi";
+	char* arg_alt[] = {"./rshell_int", "echo", "hi", "&&", "echo", "hi"};
 
 	/*
 	cout << "custom line args" << endl;
@@ -27,12 +27,20 @@ int main(int argv, char** argc){
 
 	Interface rshell_cmd;
 
-	//rshell_cmd.setCommand(cmd);
-	//rshell_cmd.doWork();
-
-	rshell_cmd.setCommand(argv, argc);
-//	rshell_cmd.setCommand(argv, arg_alt);
-//	rshell_cstr.setCommand(cmd);
+	cout << "First command: " << endl;
+	rshell_cmd.setCommand(argv, arg_alt);
 	rshell_cmd.doWork();
+
+	cout << "Second command: " << endl;
+	rshell_cmd.setCommand(argv, argc);
+	rshell_cmd.doWork();
+
+	/*
+	cout << "Third command: " << endl;
+	rshell_cmd.setCommand(cmd);
+	*/
+
+
+//	rshell_cmd.doWork();
 }
 
