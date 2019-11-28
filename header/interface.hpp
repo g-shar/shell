@@ -279,7 +279,6 @@ private:
 
 		// check for unclosed parentheses
 		if(closer != 0){
-			cout << closer << endl;
 			throw "Unclosed Parentheses!";
 		}
 

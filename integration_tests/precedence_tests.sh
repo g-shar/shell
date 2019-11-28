@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TESTS=( "(echo A && echo B) || (echo C && echo D)" "(echo  A || echo B) && echo A" "echo A && ((echo B || echo C) &&  echo D)")
+TESTS=( "\"(echo A && echo B) || (echo C && echo D)\"" "\"(echo  A || echo B) && echo A\"" "\"echo A && ((echo B || echo C) &&  echo D)\"")
 
 for input in "${TESTS[@]}"
 do
