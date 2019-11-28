@@ -1,28 +1,22 @@
 #!/bin/sh
 
-TESTS=("test -e ../unit_test" "test -f ../names.txt" "test -d ../integration_test")
+TESTS=( "(echo A && echo B) || (echo C && echo D)" "(echo  A || echo B) && echo A" "echo A && ((echo B || echo C) &&  echo D)")
 
 for input in "${TESTS[@]}"
 do
-   echo "Test CMD Test starting..."
-   echo $(../rshell ${input}) #> integration_tests.txt 
-   $(${input})		#runs the test command
-   if [ "$?" -eq 0 ];	#decides what output based on the success of the system test command
+   echo "Precedence Test with ${input}"
+   $(../rshell ${input}) > integration_tests.txt
+   input2=$(eval ${input}) 
+   output=$(cat integration_tests.txt)
+   echo "System: $input2"
+   echo "Rshell: $output"
+   if [ "$input2" = "$output" ]
    then
-      result="(True)"
+	echo "Precedence test succeeded with ${input}"
    else
-      result="(False)"
+	echo "Precedence test failed with ${input}"
    fi
-   output=$(grep ^$result integration_tests.txt)
-   echo "system: ${result}"
-   echo "rshell: ${output}"
-   echo "Checking if correct execution of command..."
-   if [ ! -z "$output" ]
-   then 
-      	echo "Test command execution test passed with ${input}"
-   else 
-      	echo "Test command execution test failed with ${input}"
-   fi
+   echo " "
 done
 
 
