@@ -196,29 +196,32 @@ private:
 
 	// if receiving general input
 	void parse(char* input){
-		stack<char> closer;				//  Stack keeps track of parens
 		vector<char*> base_commands;	//	Vector of commands
 		char* hold = NULL;				//  For copying cstrings
 		int length = 0;					//	To help determine quote / string size
 		int i = 0;						//	Iterating value for input
+		int closer = 0;					// 	Keeps track of closed parentheses
 
 		
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
-
 			// Parentheses
 			if(checkPar(input + i) != NULL)
 			{
+				// If open parentheses
 				if(input[i] == '('){
-					closer.push(input[i]);
+					++closer;
 				}				
 
-				else if(closer.empty() || closer.top() != '('){
-					throw "Unclosed Parentheses error!";
+				// If closed without an open parentheses
+				else if(closer == 0){
+					throw "Unclosed parentheses error!";
 				}
+
+				// If closed parentheses
 				else{
-					closer.pop();
+					--closer;
 				}
 
 				length = 1;
@@ -275,7 +278,8 @@ private:
 		}
 
 		// check for unclosed parentheses
-		if(!closer.empty()){
+		if(closer != 0){
+			cout << closer << endl;
 			throw "Unclosed Parentheses!";
 		}
 

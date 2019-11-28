@@ -100,7 +100,12 @@ public:
 
 	static char* checkCommand(char* phrase)
 	{
-		if(!(checkSemicolon(phrase) || checkOr(phrase) || checkAnd(phrase) || checkComment(phrase))){
+		if(!(checkSemicolon(phrase) ||
+			 checkOr(phrase) ||
+			 checkAnd(phrase) ||
+			 checkComment(phrase) ||
+			 checkPar(phrase)))
+		{
 			return phrase;
 		}
 		return NULL;
@@ -140,11 +145,12 @@ public:
 		int i = 0;
 		while(phrase[i] != '\0')
 		{
-			if((checkQuotes(phrase + i) != NULL) ||
-			   (checkSemicolon(phrase + i) != NULL) ||
-			   (checkAnd(phrase + i) != NULL) ||
-			   (checkOr(phrase + i) != NULL) ||
-			   (checkSpace(phrase + i) != NULL))
+			if((checkQuotes(phrase + i)) ||
+			   (checkSemicolon(phrase + i)) ||
+			   (checkAnd(phrase + i)) ||
+			   (checkOr(phrase + i)) ||
+			   (checkSpace(phrase + i)) ||
+			   (checkPar(phrase + i)))
 			{
 				return i;
 			}
