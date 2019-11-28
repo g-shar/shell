@@ -13,7 +13,6 @@ int main(int argv, char** argc){
 			while(true){
 				cout << "$ ";
 				cin.getline(cstr, sizeof(cstr), '\n');
-
 				cstr[strlen(cstr)] = '\0';
 
 				rshell.setCommand(cstr);
