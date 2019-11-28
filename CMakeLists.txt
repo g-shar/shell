@@ -17,9 +17,9 @@ ADD_EXECUTABLE( rshell
 	src/rshell.cpp
 )
 
-ADD_EXECUTABLE( practice
-	prototype/rshell_int.cpp
-)
+#ADD_EXECUTABLE( practice
+#	prototype/rshell_int.cpp
+#)
 
 TARGET_INCLUDE_DIRECTORIES(test
    PRIVATE

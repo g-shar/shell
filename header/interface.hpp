@@ -152,13 +152,13 @@ private:
 
 	// if receiving input from cmd prompt
 	void parse(int argv, char** argc){
-		char* input = NULL;
-		int i, sum = 0;
+		char* input = NULL;		// cstring holder
+		int i;					// iterator
+	    int	sum = argv - 2;		// in order to make room for spaces
 
 		// Get size of arguments
 		for(i = 1; argc[i]; ++i){
 			sum += strlen(argc[i]);		
-			++sum;
 		}
 
 		input = new char[sum];
@@ -166,7 +166,11 @@ private:
 		// Stack all arguments into 1 cstring
 		for(i = 1; argc[i]; ++i){
 			strcat(input, argc[i]);
-			strcat(input, " ");
+
+			// Keep adding spaces if there's another element
+			if(argc[i + 1]){
+				strcat(input, " ");
+			}
 		}
 
 		// Calls an already implemented parse

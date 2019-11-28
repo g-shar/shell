@@ -1,1 +1,1 @@
-$
+2nd_cmd_executed
