@@ -26,6 +26,7 @@ do
    else 
       echo "Command with Comments Execution test failed with ${input}"
    fi
+   echo " "
 done
 
 #tests primarily for comments being respected
