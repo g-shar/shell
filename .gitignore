@@ -41,4 +41,4 @@ cmake_install.cmake
 Makefile
 
 #Text files
-integration_tests.txt
+root/integration_tests/integration_tests.txt
