@@ -26,10 +26,9 @@ int main(int argv, char** argc){
 
 
 	Interface rshell_cmd;
-	Interface rshell_cstr;
 
-	argc[argv + 1] = NULL;
-
+	//rshell_cmd.setCommand(cmd);
+	//rshell_cmd.doWork();
 
 	rshell_cmd.setCommand(argv, argc);
 //	rshell_cmd.setCommand(argv, arg_alt);
