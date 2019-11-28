@@ -89,32 +89,39 @@ private:
 
 	// if receiving input from cmd prompt
 	void parse(int argv, char** argc){
-		vector<char*> base_commands;	
-		int i;
+		char* input = NULL;
+		int i, sum = 0;
 
-		for(i = 0; argc[i] != NULL; ++i){
-			base_commands.push_back(argc[i]);
-		}	
+		// Get size of arguments
+		for(i = 1; argc[i]; ++i){
+			sum += strlen(argc[i]);		
+			++sum;
+		}
 
-		// for safety premeasures but it seems like main args includes NULL
-		base_commands.push_back(NULL);
-		printV(base_commands);
+		input = new char[sum];
+
+		// Stack all arguments into 1 cstring
+		for(i = 1; argc[i]; ++i){
+			strncat(input, argc[i]);
+			strncat(input, " ");
+		}
+
+		// Calls an already implemented parse
+		this->parse(input);
 		// buildTree(base_commands);
 	}
 
 	// if receiving general input
 	void parse(char* input){
 		vector<char*> base_commands;	//	Vector of commands
-		char* hold = NULL;				//  For copying cstrings
-		int length = 0;					//	To help determine quote / string size
-		int i = 0;						//	Iterating value for input
+		char* hold = NULL;		//  For copying cstrings
+		int length = 0;			//	To help determine quote / string size
+		int i = 0;			//	Iterating value for input
 
 		
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
-			cout << "Iteration => " << i << endl;
-
 			// Semicolons
 			if(checkSemicolon(input + i) != NULL)
 			{
