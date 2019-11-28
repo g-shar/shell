@@ -50,13 +50,20 @@ private:
 
 			// If operator, push to stack and replace previous if no other operator
 			else{
-				if(checkOperator(hold.top())){
+				if(!hold.empty() && checkOperator(hold.top())){
 					postFixVector.push_back(hold.top());
 					hold.pop();
 				}
 				hold.push(base_commands[i]);
 			}
 		}
+
+		// Empty remains of the stack
+		while(!hold.empty()){
+			postFixVector.push_back(hold.top());
+			hold.pop();
+		}
+
 		return postFixVector;
 	}
 
@@ -178,6 +185,7 @@ private:
 		/** Puts all connectors & command objects in vector **/
 		while(input[i] != '\0')
 		{
+
 			// Semicolons
 			if(checkSemicolon(input + i) != NULL)
 			{
@@ -225,8 +233,10 @@ private:
 
 		}
 
-		// Constructs the tree
-		buildTree2(base_commands);
+		vector<char*> postFix = buildPostFix(base_commands);
+
+	
+		buildTree2(postFix);
 
 
 	}

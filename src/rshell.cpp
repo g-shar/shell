@@ -6,13 +6,15 @@ using namespace std;
 
 int main(int argv, char** argc){
 	Interface rshell;
-	char cstr[100] = {};
+	char cstr[100];
 	
 	try{
 		if(argv == 1){
 			while(true){
 				cout << "$ ";
 				cin.getline(cstr, sizeof(cstr), '\n');
+				cstr[strlen(cstr)] = '\0';
+
 				rshell.setCommand(cstr);
 				rshell.doWork();
 			}
