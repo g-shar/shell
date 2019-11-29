@@ -1,0 +1,7 @@
+(echo A)
+(echo B && echo C)
+(echo D && echo E) || (echo B && echo C)
+(echo F || echo B) && echo G
+echo H && ((echo I || echo C) && echo J)
+((echo K && echo B || echo C) || echo D)
+exit
