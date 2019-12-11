@@ -12,12 +12,14 @@
 #include "base_cmd.hpp"
 
 class Cmd_Obj: public Base_Cmd {
+
+
 public:
-	Cmd_Obj(char* cmd){
+	Cmd_Obj(char* cmd): file_name(NULL){
 		parse(cmd);		
 	}
 
-	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list){
+	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL){}
 		int sz=0;
                 while(argList[sz]!=NULL)
 		{
@@ -193,10 +195,14 @@ private:
 		for(int k = 0; k < size; ++k){
 			argList[k] = vList[k];
 		}
+
 		argList[size] = NULL;
 		executable = argList[0];
+
   	}
 
+	vector<cmd_obj*> pipes;
+	char* file_name;
    	char* executable;
    	char** argList;
 	int size;
