@@ -4,6 +4,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <string>
+#include <vector>
 #include <fcntl.h>
 #include <iostream>
 using namespace std;
@@ -16,23 +17,29 @@ int main(int argc, char **argv)
 {
     int status;
     int i;
-    
-    int index=0;
+
+	char* arg1[] = {"cat", "pipe_test.cpp", NULL};
+	char* arg2[] = {"cat", NULL};
+	char* arg3[] = {"tr", "a-z", "A-Z", NULL};
     
     //size is # of arguments in the vector or list
     //index starts at 0;
     
+	/*
     char *arg1[] = {"cat", "scores", NULL};
     char *arg2[] = {"grep", "Villanova", NULL};
     char *arg3[] = {"cut", "-b", "1-10", NULL};
+	*/
     
     // make 2 pipes (cat to grep and grep to cut); each has 2 fds
     
     // cmd1 | cmd2    (size: 2, pipe array: 2)
-    //cmd1 | cmd2 | cmd3   (size: 3, pipe array: 4)
-    //cmd1 | cmd2 | cmd3 | cmd4   (size: 4, pipe array: 6)
+    // cmd1 | cmd2 | cmd3   (size: 3, pipe array: 4)
+    // cmd1 | cmd2 | cmd3 | cmd4   (size: 4, pipe array: 6)
+
+
+
     int pipes[(size-1)*2];
-    
     pipe(pipes); // sets up 1st pipe
     
     if (fork() == 0)
