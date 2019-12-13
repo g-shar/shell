@@ -17,9 +17,9 @@ ADD_EXECUTABLE( rshell
 	src/rshell.cpp
 )
 
-ADD_EXECUTABLE( pipe_test
-	prototype/pipe_test.cpp
-)
+#ADD_EXECUTABLE( pipe_test
+#	prototype/pipe_test.cpp
+#)
 
 TARGET_INCLUDE_DIRECTORIES(test
    PRIVATE

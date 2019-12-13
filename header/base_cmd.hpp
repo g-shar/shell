@@ -4,7 +4,10 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <string>
 using namespace std;
+
+enum class en {CMD, IN, OUT, APP};
 
 class Base_Cmd {
 
@@ -13,6 +16,74 @@ public:
    	virtual bool doWork()=0;
 
 	/** Static Helper Functions **/
+
+	static en scan(string phrase){
+		for(int i = 0; i < phrase.size(); ++i){
+			if(phrase[i] == '>' && phrase[i + 1] == '>'){
+				return en::APP;
+			}
+
+			if(phrase[i] == '>'){
+				return en::OUT;
+			}
+
+			if(phrase[i] == '<'){
+				return en::IN;
+			}
+
+		}
+		return en::CMD;
+
+
+	}
+
+	static char* checkRedirect(char* phrase){
+		if(checkIn(phrase) ||
+		   checkOut(phrase) ||
+		   checkApp(phrase) ||
+		   checkPipe(phrase)){
+		   return phrase;
+		}
+		return NULL;
+	}
+
+	static char* checkIn(char* phrase){
+		if(*phrase == '<'){
+			return phrase;
+		}
+		return NULL;
+	}
+
+	static char* checkOut(char* phrase){
+		if(*phrase == '>'){
+			return phrase;
+		}
+		return NULL;
+	}
+
+	static char* checkApp(char* phrase){
+		if(phrase[0] == '>' && phrase[1] == '>')
+		{
+			return phrase;
+		}
+
+
+		else if(phrase[0] == '>')
+		{
+			throw "checkApp: Single Append Redirection Error!\n\
+				   check base_cmd.hpp";			
+			exit(1);
+		}
+
+		return NULL;
+	}
+
+	static char* checkPipe(char* phrase){
+		if(*phrase == '|'){
+			return phrase;
+		}
+		return NULL;
+	}
 	
 	static bool checkTest(char** argList, int size){
 		int a = size - 1;
@@ -76,12 +147,6 @@ public:
 			return phrase;
 		}	
 
-		// Just one pipe throws an error
-		else if(phrase[0] == '|'){
-			throw "checkOr: Single Pipe Error!\n \
-				   Line 78 of base_cmd.hpp";
-			exit(1);
-		}
 		return NULL;
 	}
 
@@ -127,6 +192,52 @@ public:
 	/*******************************
 	 *SPECIAL HELPER FUNCTIONS
 	 *******************************/
+
+	
+	static string trimWhitespace(string phrase){
+		return trimTrail(trimLead(phrase));
+	}
+
+	static string trimLead(string phrase){
+		string w = " \t";
+		int start = phrase.find_first_not_of(w);
+		return (start == string::npos) ? phrase : phrase.substr(start);
+	}
+
+	static string trimTrail(string phrase){
+		string w = " \t";
+		int end = phrase.find_last_not_of(w);
+		return (end == string::npos) ? phrase : phrase.substr(0, end + 1);
+	}
+
+
+	static int sizeRedirect(string phrase){
+		for(int i = 0; i < phrase.size(); ++i){
+			//skip quotes
+			if(phrase[i] == '\"'){
+				i += phrase.find('\"');
+			}
+
+			if(phrase[i] == '|' || phrase[i] == '<' || phrase[i] == '>'){
+				return i;	
+			}
+		}	
+		return phrase.size();
+	}
+
+	static int sizePipe(string phrase){
+		for(int i = 0; i < phrase.size(); ++i){
+			if(phrase[i] == '\"'){
+				i += phrase.find('\"');
+			}
+
+			if(phrase[i] == '|'){
+				return i;
+			}
+		}
+		return phrase.size();
+	}
+
 
 	// Returns the end of the quotation or exits on error with no closing quote
 	static int sizeQuote(char* phrase)
@@ -190,8 +301,13 @@ public:
 		return i;
 	}
 
+	static char* handleCstr(const char* phrase){
+		if(!phrase) return NULL;
+		return newStrCpy(phrase, strlen(phrase));
+	}
+
 	// Dynamically allocates a new cstring to copy over data
-	static char* newStrCpy(char* phrase, int size)
+	static char* newStrCpy(const char* phrase, int size)
 	{
 		char* new_copy = new char[size + 1];	// plus nullspace
 		strncpy(new_copy, phrase, size);

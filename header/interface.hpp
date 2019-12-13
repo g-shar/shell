@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <cstring>
+#include <string>
 #include <queue>
 using namespace std;
 
@@ -38,6 +39,8 @@ private:
 			   Line 37 from interface.hpp";
 		exit(1);
 	}
+
+
 
 	vector<char*> buildPostFix(vector<char*> base_commands){
 		vector<char*> postFixVector;
@@ -100,7 +103,7 @@ private:
 
 			// Push new command object onto stack
 			if(checkCommand(base_commands[i])){
-				tree.push(new Cmd_Obj(base_commands[i]));	
+				tree.push(Cmd_Obj::getCmdObj(base_commands[i]));	
 			}
 
 			// Destack base commands from stack and attach to operator before pushing onto stack again
