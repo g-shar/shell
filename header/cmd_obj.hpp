@@ -45,73 +45,46 @@ public:
 			exit(1);	
 		}
 		else if(pid==0)
-	   	{
-			if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
-			{
-				//checks if test has a flag or a given path
-				if(size>=2)
+	   	{	
+			if(/*vector of pipes is not empty*/)
+			{	
+				int stat;
+				int pipes[this->piping.size()-1*2];
+				pipe(pipes);
+				if (fork()==0)
 				{
-					struct stat s1;
-					//if test has a flag and a path
-					if(size>=3)
-					{	
-						//checks if the file exists 
-						if(stat(argList[2], &s1)==-1) 
-						{
-							cout<<"(False)"<<endl;
-							exit(1);
-						}
-						//checks if test has a -f flag
-						if(std::strstr(argList[1], "-f"))
-						{
-							//checks if the path is a regular file
-							if(!(S_ISREG(s1.st_mode)))
-							{	
-								cout<<"(False)"<<endl;
-								exit(1);
-							}
-							cout<<"(True)"<<endl;
-							exit(0);				
-						}
-						//checks if test has a -d flag
-						else if(std::strstr(argList[1], "-d"))
-						{
-							//checks if the path is a directory
-							if(!(S_ISDIR(s1.st_mode)))
-							{
-								cout<<"(False)"<<endl;
-								exit(1);
-							}
-							cout<<"(True)"<<endl;
-							exit(0);
-						}
-						//if test has -e flag and the command runs successfully
-						else if(std::strstr(argList[1], "-e"))
-						{
-							cout<<"(True)"<<endl;
-							exit(0);
-						}
-						//returns false if it can't recognize the flag 
-						cout<<"(False)"<<endl;
-						exit(1);
-					}
-					//if test only has a path or only has a flag
-					if(std::strstr(argList[1], "-e") || std::strstr(argList[1],"-d") || std::strstr(argList[1],"-f"))
+					dup2(pipes[1], 1);
+					for(int i=0; i<(size-1)*2; ++i)
 					{
-						cout<<"(True)"<<endl;
-						exit(0);
+						close(pipes[i];
 					}
-					if(stat(argList[1], &s1)==-1) 
-					{
-						cout<<"(False)"<<endl;
-						exit(1);
-					}
-					cout<<"(True)"<<endl;
-					exit(0);
-					
+					Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);	//creates temp cmd_obj to ONLY run the command
+					temp->doWork();
+					delete temp;		
 				}
-				cout<<"(False)"<<endl;
-				exit(1);
+				else
+				{
+					this->pipe_doWork(1, this->piping.size());
+				}
+				for(int i=0; i<size*2; ++i)
+				{
+					close
+				}
+
+				for(i=0; i<size; ++i)
+				{
+					waitpid(-1, &stat, 0);
+				}
+					
+			}
+			else if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
+			{
+				this->test_doWork();
+
+			}
+			else if(/* functionality for I/O REDIRECTION*/)
+			{				
+				this->io_doWork();	
 			}
 			else 
 			{
@@ -148,6 +121,7 @@ public:
 	   	}
    		return false;
 	}
+
 
 	void printCommands(){
 		for(int i = 0; i < size; ++i){
@@ -201,8 +175,136 @@ private:
 
   	}
 
-	vector<cmd_obj*> pipes;
-	char* file_name;
+	void io_doWork()
+	{
+		if(/*conditional to check for "<" */)
+		{
+			int newin=open("filename", O_RDONLY);
+			//int dupin=dup(0);
+			dup2(newin, 0);
+			close(newin);
+			execvp(this->executable, this->argList);	
+		}
+		else if(/*conditional to check for ">" */)
+		{
+			int newout=open("FILENAME", O_WRONLY);
+			dup2(newout,1);
+			close(newout);
+			execvp(this->executable,this->argList);
+		}
+		else 
+		{
+			int newout2=open("FILENAME", O_WRONLY, O_APPEND);
+			dup2(newout2, 1);	
+			close(newout2);
+			execvp(this->executable, this->argList);
+		}
+		
+	}
+
+	void test_doWork()
+	{
+		if(size>=2)
+		{
+			struct stat s1;
+			//if test has a flag and a path
+			if(size>=3)
+			{	
+				//checks if the file exists 
+				if(stat(argList[2], &s1)==-1) 
+				{
+					cout<<"(False)"<<endl;
+					exit(1);
+				}
+					//checks if test has a -f flag
+					if(std::strstr(argList[1], "-f"))
+					{
+						//checks if the path is a regular file
+						if(!(S_ISREG(s1.st_mode)))
+						{	
+							cout<<"(False)"<<endl;
+							exit(1);
+						}
+						cout<<"(True)"<<endl;
+						exit(0);				
+					}
+					//checks if test has a -d flag
+					else if(std::strstr(argList[1], "-d"))
+					{
+						//checks if the path is a directory
+						if(!(S_ISDIR(s1.st_mode)))
+						{
+							cout<<"(False)"<<endl;
+							exit(1);
+						}
+						cout<<"(True)"<<endl;
+						exit(0);
+					}
+					//if test has -e flag and the command runs successfully
+					else if(std::strstr(argList[1], "-e"))
+					{
+						cout<<"(True)"<<endl;
+						exit(0);
+					}
+					//returns false if it can't recognize the flag 
+					cout<<"(False)"<<endl;
+					exit(1);
+				}
+				//if test only has a path or only has a flag
+				if(std::strstr(argList[1], "-e") || std::strstr(argList[1],"-d") || std::strstr(argList[1],"-f"))
+				{
+					cout<<"(True)"<<endl;
+					exit(0);
+				}
+				if(stat(argList[1], &s1)==-1) 
+				{
+					cout<<"(False)"<<endl;
+					exit(1);
+				}
+				cout<<"(True)"<<endl;
+				exit(0);
+					
+			}
+			cout<<"(False)"<<endl;
+			exit(1);	
+	}
+
+	void pipe_doWork(int argIndex, int size)
+	{
+		if(index<size)
+		{
+			pipes(pipes+(argIndex*2));
+			if( fork() ==0)
+			{
+				dup2(pipes[(argIndex-1)*2], 0);
+				dup2(pipes[argIndex*2+1], 1);
+
+				for(int i=0; i<size*2; ++i)
+				{
+					close(pipes[i]);
+				}
+				
+				piping.at(argIndex)->doWork();
+			}
+			else
+			{
+				pipe(argIndex+1, size);	
+			}
+		}
+		else
+		{
+			if(fork()==0)
+			{
+				dup2(pipes[(size-1)*2-2], 0);
+				for(int i=0; i<size*2; ++i)
+				{
+					close(pipes[i]);
+				}
+				piping.at(size-1)->doWork();
+			}
+		}
+	}
+
    	char* executable;
    	char** argList;
 	int size;
