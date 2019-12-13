@@ -18,19 +18,22 @@ class Cmd_Obj: public Base_Cmd {
 public:
 
 	// Defaults to normal Cmd
-	Cmd_Obj(char* cmd): file_name(NULL), type(en::CMD){
+	Cmd_Obj(char* cmd): file_name(NULL), type(en::CMD)
+	{
 		parse(cmd);		
 	}
 
 	// For handling Special Cmd types 
-	Cmd_Obj(char* cmd, char* file_name, en type): file_name(file_name), type(type){
+	Cmd_Obj(char* cmd, char* file_name, en type): file_name(file_name), type(type)
+	{
 		parse(cmd);
 	}
 
 
 
 	// Copy constructor just for vector
-	Cmd_Obj(char* cmd, Cmd_Obj* copy, vector<Cmd_Obj*> list):list(list), type(copy->type){
+	Cmd_Obj(char* cmd, Cmd_Obj* copy, vector<Cmd_Obj*> list):list(list), type(copy->type)
+	{
 		file_name = handleCstr(copy->file_name);
 		parse(cmd);
 
@@ -38,7 +41,8 @@ public:
 
 
 	// Unit tests
-	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL){
+	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL)
+	{
 		int sz = 0;
 		while(argList[sz]!=NULL){
 			sz+=1;
@@ -47,7 +51,8 @@ public:
 	}
 
 
-	~Cmd_Obj(){
+	~Cmd_Obj()
+	{
 		for(int i = 0; i < size; ++i)
 		{
 			delete[] argList[i];
@@ -56,7 +61,8 @@ public:
 
 
 	// aight i'm tired of cstrings so
-	static Cmd_Obj* getCmdObj(char* phrase){
+	static Cmd_Obj* getCmdObj(char* phrase)
+	{
 		string str = string(phrase);	// Cstring turned to string
 		string cut = "";		// Substring cutting helper
 		char* temp_cstr_cmd = NULL;
@@ -88,7 +94,8 @@ public:
 	}
 
 
-	static Cmd_Obj* getRedirect(string phrase){
+	static Cmd_Obj* getRedirect(string phrase)
+	{
 		phrase = trimWhitespace(phrase);
 		int next = sizeRedirect(phrase);
 		string right_file;
@@ -130,6 +137,14 @@ public:
 		throw "Uncaught symbol? Base_cmd getRedirect();";
 		exit(1);
 
+	}
+
+
+	void printCommands()
+	{
+		for(int i = 0; i < size; ++i){
+			cout << argList[i];
+		}
 	}
 
 
@@ -247,15 +262,10 @@ public:
    		return false;
 	}
 
-	void printCommands(){
-		for(int i = 0; i < size; ++i){
-			cout << argList[i];
-		}
-	}
-
 private:
 
-	void parse(char* cmd){
+	void parse(char* cmd)
+	{
 		int i = 0;			// Counter for the command passed in
 		int j = 0;			// Counter for the cstr arr
 		int length = 0;		// For length determination
@@ -299,6 +309,136 @@ private:
 
   	}
 
+	void io_doWork()
+	{
+		if(/*conditional to check for "<" */)
+		{
+			int newin=open("filename", O_RDONLY);
+			//int dupin=dup(0);
+			dup2(newin, 0);
+			close(newin);
+			execvp(this->executable, this->argList);	
+		}
+		else if(/*conditional to check for ">" */)
+		{
+			int newout=open("FILENAME", O_WRONLY);
+			dup2(newout,1);
+			close(newout);
+			execvp(this->executable,this->argList);
+		}
+		else 
+		{
+			int newout2=open("FILENAME", O_WRONLY, O_APPEND);
+			dup2(newout2, 1);	
+			close(newout2);
+			execvp(this->executable, this->argList);
+		}
+		
+	}
+
+	void test_doWork()
+	{
+		if(size>=2)
+		{
+			struct stat s1;
+			//if test has a flag and a path
+			if(size>=3)
+			{	
+				//checks if the file exists 
+				if(stat(argList[2], &s1)==-1) 
+				{
+					cout<<"(False)"<<endl;
+					exit(1);
+				}
+					//checks if test has a -f flag
+					if(std::strstr(argList[1], "-f"))
+					{
+						//checks if the path is a regular file
+						if(!(S_ISREG(s1.st_mode)))
+						{	
+							cout<<"(False)"<<endl;
+							exit(1);
+						}
+						cout<<"(True)"<<endl;
+						exit(0);				
+					}
+					//checks if test has a -d flag
+					else if(std::strstr(argList[1], "-d"))
+					{
+						//checks if the path is a directory
+						if(!(S_ISDIR(s1.st_mode)))
+						{
+							cout<<"(False)"<<endl;
+							exit(1);
+						}
+						cout<<"(True)"<<endl;
+						exit(0);
+					}
+					//if test has -e flag and the command runs successfully
+					else if(std::strstr(argList[1], "-e"))
+					{
+						cout<<"(True)"<<endl;
+						exit(0);
+					}
+					//returns false if it can't recognize the flag 
+					cout<<"(False)"<<endl;
+					exit(1);
+				}
+				//if test only has a path or only has a flag
+				if(std::strstr(argList[1], "-e") || std::strstr(argList[1],"-d") || std::strstr(argList[1],"-f"))
+				{
+					cout<<"(True)"<<endl;
+					exit(0);
+				}
+				if(stat(argList[1], &s1)==-1) 
+				{
+					cout<<"(False)"<<endl;
+					exit(1);
+				}
+				cout<<"(True)"<<endl;
+				exit(0);
+					
+			}
+			cout<<"(False)"<<endl;
+			exit(1);	
+	}
+
+	void pipe_doWork(int argIndex, int size)
+	{
+		if(index<size)
+		{
+			pipes(pipes+(argIndex*2));
+			if( fork() ==0)
+			{
+				dup2(pipes[(argIndex-1)*2], 0);
+				dup2(pipes[argIndex*2+1], 1);
+
+				for(int i=0; i<size*2; ++i)
+				{
+					close(pipes[i]);
+				}
+				
+				piping.at(argIndex)->doWork();
+			}
+			else
+			{
+				pipe(argIndex+1, size);	
+			}
+		}
+		else
+		{
+			if(fork()==0)
+			{
+				dup2(pipes[(size-1)*2-2], 0);
+				for(int i=0; i<size*2; ++i)
+				{
+					close(pipes[i]);
+				}
+				piping.at(size-1)->doWork();
+			}
+		}
+	}
+
 	vector<Cmd_Obj*> list;
 	char* file_name;
    	char* executable;
@@ -308,7 +448,10 @@ private:
 };
 
 #endif
-//=================================================//
+
+
+
+
 #ifndef __CMD_OBJ_HPP__
 #define __CMD_OBJ_HPP__
 
