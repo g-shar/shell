@@ -23,17 +23,7 @@ public:
 
 	// For handling Special Cmd types 
 	Cmd_Obj(char* cmd, char* file_name, en type): file_name(file_name), type(type){
-		int loc = 0;
 		parse(cmd);
-
-		// get file name & assigns
-		if(type == en::IN || type == en::OUT){
-			string temp(cmd);
-			loc = temp.find(">");
-			loc = (loc == string::npos) ? temp.find("<") : loc;
-			file_name = new char[temp.size() - loc + 1];
-			strcpy(file_name, temp.substr(loc).c_str());
-		}
 	}
 
 
@@ -73,7 +63,7 @@ public:
 		vector<Cmd_Obj*> list;		// Vector keeping track of cmd_objs
 
 		// If no pipes or redirects
-		if(sizeRedirect(phrase) == string::npos){
+		if(sizeRedirect(str) == str.size()){
 			return new Cmd_Obj(phrase);
 		}
 
