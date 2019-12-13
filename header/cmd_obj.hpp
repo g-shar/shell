@@ -84,11 +84,18 @@ public:
 				list.push_back(temp_cmd);	
 			}
 
-			if(!temp_cstr_cmd){
+			if(!temp_cstr_cmd && cut != ""){
 				temp_cstr_cmd = handleCstr(cut.c_str());
 			}
 		}
-
+		
+		// closing command
+		temp_cmd = getRedirect(str);
+		list.push_back(temp_cmd);
+		
+		if(!temp_cstr_cmd){
+			temp_cstr_cmd = handleCstr(cut.c_str());
+		}
 
 		return new Cmd_Obj(temp_cstr_cmd, list[0], list);
 
@@ -137,7 +144,6 @@ public:
 
 		throw "Uncaught symbol? Base_cmd getRedirect();";
 		exit(1);
-
 	}
 
 
