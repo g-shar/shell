@@ -11,22 +11,53 @@
 
 #include "base_cmd.hpp"
 
+enum class en {CMD, IN, OUT, APP};
+
+
 class Cmd_Obj: public Base_Cmd {
 
 
 public:
-	Cmd_Obj(char* cmd): file_name(NULL){
+
+	// Defaults to normal Cmd
+	Cmd_Obj(char* cmd): file_name(NULL), type(en::CMD){
 		parse(cmd);		
 	}
 
-	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL){}
+	// For handling Special Cmd types 
+	Cmd_Obj(char* cmd, char* file_name, en type): file_name(file_name), type(type){
+		int loc = 0;
+		parse(cmd);
+
+		// get file name & assigns
+		if(type == en::IN || type == en::OUT){
+			string temp(cmd);
+			loc = temp.find(">");
+			loc = (loc == string::npos) ? temp.find("<") : loc;
+			file_name = new char[temp.size() - loc + 1];
+			strcpy(file_name, temp.substr(loc));
+		}
+	}
+
+	// For handling 
+
+	// Top redirector hosting vector
+	Cmd_Obj(char* cmd, en type, vector<*Cmd_Obj> list):file_name(NULL), type(type), list(list){
+		int loc = 0;
+		parse(cmd);
+
+	}
+
+	/*
+	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL), en(en::CMD){}
 		int sz=0;
                 while(argList[sz]!=NULL)
 		{
 			sz+=1;
 		}
 		this->size=sz;
-	};
+	}
+	*/
 
 	~Cmd_Obj(){
 		for(int i = 0; i < size; ++i)
@@ -201,11 +232,12 @@ private:
 
   	}
 
-	vector<cmd_obj*> pipes;
+	vector<cmd_obj*> list;
 	char* file_name;
    	char* executable;
    	char** argList;
 	int size;
+	en type;
 };
 
 #endif

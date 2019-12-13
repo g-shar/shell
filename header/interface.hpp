@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <cstring>
+#include <string>
 #include <queue>
 using namespace std;
 
@@ -37,6 +38,22 @@ private:
 		throw "getConnector: Nonexistent connector!\n \
 			   Line 37 from interface.hpp";
 		exit(1);
+	}
+
+	// aight i'm tired of cstrings so
+	Base_Cmd* getCmdObj(char* phrase){
+		string str = string(phrase);	// Cstring turned to string
+		string cut;						// Substring cutting helper
+		vector<*Cmd_Obj> list;		// Vector keeping track of cmd_objs
+
+		for(int i = 0; i < str.size(); ++i){
+			if(str[i] == "|"){
+				cut = str.substr(0, i);
+				
+				
+			}
+		}
+
 	}
 
 	vector<char*> buildPostFix(vector<char*> base_commands){
