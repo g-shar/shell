@@ -21,13 +21,13 @@ public:
 	// Defaults to normal Cmd
 	Cmd_Obj(char* cmd): file_name(NULL), type(en::CMD)
 	{
-		parse(cmd);		
+		Cmd_Obj::parse(cmd);		
 	}
 
 	// For handling Special Cmd types 
 	Cmd_Obj(char* cmd, char* file_name, en type): file_name(file_name), type(type)
 	{
-		parse(cmd);
+		Cmd_Obj::parse(cmd);
 	}
 
 
@@ -36,8 +36,16 @@ public:
 	Cmd_Obj(char* cmd, Cmd_Obj* copy, vector<Cmd_Obj*> list):list(list), type(copy->type)
 	{
 		file_name = handleCstr(copy->file_name);
-		parse(cmd);
+		Cmd_Obj::parse(cmd);
 
+		/*
+		cout << endl << "Inside copy constructor!" << endl;
+		cout << "This is the copy!" << endl;
+		cout << "List size is: " << list.size() << endl;
+		cout << "File name is: " << file_name << endl;
+		cout << "Executable is: " << executable << endl;
+		cout << "Size is: " << size << endl;
+		*/
 	}
 
 
@@ -77,12 +85,14 @@ public:
 
 		for(int i = 0; i < str.size(); ++i){
 
+			// if pipe object
 			if(str[i] == '|'){
 				cut = str.substr(0, i);
 				str = str.substr(i + 1);
 				temp_cmd = getRedirect(cut);
 				list.push_back(temp_cmd);	
 			}
+
 
 			if(!temp_cstr_cmd && cut != ""){
 				temp_cstr_cmd = handleCstr(cut.c_str());
@@ -94,7 +104,7 @@ public:
 		list.push_back(temp_cmd);
 		
 		if(!temp_cstr_cmd){
-			temp_cstr_cmd = handleCstr(cut.c_str());
+			temp_cstr_cmd = handleCstr(str.c_str());
 		}
 
 		return new Cmd_Obj(temp_cstr_cmd, list[0], list);
@@ -131,24 +141,29 @@ public:
 
 		// Handles which object return
 		if(phrase[next] == '<'){
+			/*
 			cout << "cmd_obj.hpp INPUT OBJECT" << endl;
 			cout << "file: " << file << endl;
 			cout << "cmd: " << cmd << endl;
+			*/
 			return new Cmd_Obj(cmd, file, en::IN);
 		}
 
 		else if(phrase[next] == '>' && phrase[next] == '>'){
+			/*
 			cout << "cmd_obj.hpp APPEND OBJECT" << endl;
 			cout << "file: " << file << endl;
 			cout << "cmd: " << cmd << endl;
+			*/
 			return new Cmd_Obj(cmd, file, en::APP);
 		}
 
 		else if(phrase[next] == '>'){
+			/*
 			cout << "cmd_obj.hpp OUTPUT OBJECT" << endl;
 			cout << "file: " << file << endl;
 			cout << "cmd: " << cmd << endl;
-
+			*/
 			return new Cmd_Obj(cmd, file, en::OUT);
 		}
 
@@ -296,6 +311,12 @@ private:
 
 		argList[size] = NULL;
 		executable = argList[0];
+
+		/*
+		cout << endl << "Inside cmd_obj::parse" << endl;
+		cout << "Executable: " << executable << endl;
+		cout << "End cmd_obj::parse" << endl;
+		*/
 
   	}
 
