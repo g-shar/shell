@@ -131,14 +131,24 @@ public:
 
 		// Handles which object return
 		if(phrase[next] == '<'){
+			cout << "cmd_obj.hpp INPUT OBJECT" << endl;
+			cout << "file: " << file << endl;
+			cout << "cmd: " << cmd << endl;
 			return new Cmd_Obj(cmd, file, en::IN);
 		}
 
 		else if(phrase[next] == '>' && phrase[next] == '>'){
+			cout << "cmd_obj.hpp APPEND OBJECT" << endl;
+			cout << "file: " << file << endl;
+			cout << "cmd: " << cmd << endl;
 			return new Cmd_Obj(cmd, file, en::APP);
 		}
 
 		else if(phrase[next] == '>'){
+			cout << "cmd_obj.hpp OUTPUT OBJECT" << endl;
+			cout << "file: " << file << endl;
+			cout << "cmd: " << cmd << endl;
+
 			return new Cmd_Obj(cmd, file, en::OUT);
 		}
 
