@@ -60,7 +60,9 @@ public:
 	// aight i'm tired of cstrings so
 	Cmd_Obj* getCmdObj(char* phrase){
 		string str = string(phrase);	// Cstring turned to string
-		string cut;			// Substring cutting helper
+		string cut = "";		// Substring cutting helper
+		char* temp_cstr_cmd = NULL;
+		Base_cmd* temp_cmd = NULL;
 		vector<*Cmd_Obj> list;		// Vector keeping track of cmd_objs
 
 		// If no pipes or redirects
@@ -69,15 +71,21 @@ public:
 		}
 
 		for(int i = 0; i < str.size(); ++i){
+
 			if(str[i] == "|"){
 				cut = str.substr(0, i);
 				str = str.substr(i + 1);
-				
+				temp_cmd = getRedirect(cut);
+				list.push_back(temp_cmd);	
+			}
+
+			if(!temp_cstr_cmd){
+				temp_cstr_cmd = handleCstr(cut.c_str());
 			}
 		}
 
 
-		return new Cmd_Obj(list[0]
+		return new Cmd_Obj(temp_cstr_cmd, list[0], list);
 
 	}
 

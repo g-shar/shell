@@ -196,15 +196,43 @@ public:
 	static Base* getRedirect(string phrase){
 		phrase = trimWhitespace(phrase);
 		int next = sizeRedirect(phrase);
+		string right_file;
+		string left_cmd;
+		char* file = NULL;
+		char* cmd = NULL;
 
-		// if (
+		// if normal command object
 		if(next == string::npos){
 			return  new Cmd_Obj(phrase.c_str());
 		}
 
+		// Turns left & right sides into cstrings
+		right_file = trimWhitespace(phrase.substr(next + 1));
+		left_cmd = trimWhitespace(phrase.substr(0, next));
 
+		if(right_file[0] == ">"){
+			right_file = right_file.substr(1);
+		}
 
+		file = handleCstr(right_file.c_str());
+		cmd = handleCstr(left_cmd.c_str());
+			
 
+		// Handles which object return
+		else if(phrase[next] == "<"){
+			return new Cmd_Obj(left, file, en::IN);
+		}
+
+		else if(phrase[next] == ">" && phrase[next] == ">"){
+			return new Cmd_Obj(left, file, en::APP);
+		}
+
+		else if(phrase[next] == ">"){
+			return new Cmd_Obj(left, file, en::OUT);
+		}
+
+		throw "Uncaught symbol? Base_cmd getRedirect();";
+		exit(1);
 
 	}
 	
