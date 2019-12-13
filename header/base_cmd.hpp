@@ -4,7 +4,10 @@
 #include <cstdlib>
 #include <cstring>
 #include <vector>
+#include <string>
 using namespace std;
+
+enum class en {CMD, IN, OUT, APP};
 
 class Base_Cmd {
 
@@ -16,21 +19,18 @@ public:
 
 	static en scan(string phrase){
 		for(int i = 0; i < phrase.size(); ++i){
-			if(phrase[i] == ">" && phrase[i + 1] == ">"){
+			if(phrase[i] == '>' && phrase[i + 1] == '>'){
 				return en::APP;
 			}
 
-			if(phrase[i] == ">"){
+			if(phrase[i] == '>'){
 				return en::OUT;
 			}
 
-			if(phrase[i] == "<"){
+			if(phrase[i] == '<'){
 				return en::IN;
 			}
 
-			if(phrase[i] == "|"){
-				return en::PIPE;
-			}
 		}
 		return en::CMD;
 
@@ -48,27 +48,27 @@ public:
 	}
 
 	static char* checkIn(char* phrase){
-		if(*phrase == "<"){
+		if(*phrase == '<'){
 			return phrase;
 		}
 		return NULL;
 	}
 
 	static char* checkOut(char* phrase){
-		if(*phrase == ">"){
+		if(*phrase == '>'){
 			return phrase;
 		}
 		return NULL;
 	}
 
 	static char* checkApp(char* phrase){
-		if(phrase[0] == ">" && phrase[1] == ">")
+		if(phrase[0] == '>' && phrase[1] == '>')
 		{
 			return phrase;
 		}
 
 
-		else if(phrase[0] == ">")
+		else if(phrase[0] == '>')
 		{
 			throw "checkApp: Single Append Redirection Error!\n\
 				   check base_cmd.hpp";			
@@ -79,7 +79,7 @@ public:
 	}
 
 	static char* checkPipe(char* phrase){
-		if(*phrase == "|"){
+		if(*phrase == '|'){
 			return phrase;
 		}
 		return NULL;
@@ -193,48 +193,6 @@ public:
 	 *SPECIAL HELPER FUNCTIONS
 	 *******************************/
 
-	static Base* getRedirect(string phrase){
-		phrase = trimWhitespace(phrase);
-		int next = sizeRedirect(phrase);
-		string right_file;
-		string left_cmd;
-		char* file = NULL;
-		char* cmd = NULL;
-
-		// if normal command object
-		if(next == string::npos){
-			return  new Cmd_Obj(phrase.c_str());
-		}
-
-		// Turns left & right sides into cstrings
-		right_file = trimWhitespace(phrase.substr(next + 1));
-		left_cmd = trimWhitespace(phrase.substr(0, next));
-
-		if(right_file[0] == ">"){
-			right_file = right_file.substr(1);
-		}
-
-		file = handleCstr(right_file.c_str());
-		cmd = handleCstr(left_cmd.c_str());
-			
-
-		// Handles which object return
-		else if(phrase[next] == "<"){
-			return new Cmd_Obj(left, file, en::IN);
-		}
-
-		else if(phrase[next] == ">" && phrase[next] == ">"){
-			return new Cmd_Obj(left, file, en::APP);
-		}
-
-		else if(phrase[next] == ">"){
-			return new Cmd_Obj(left, file, en::OUT);
-		}
-
-		throw "Uncaught symbol? Base_cmd getRedirect();";
-		exit(1);
-
-	}
 	
 	static string trimWhitespace(string phrase){
 		return trimTrail(trimLead(phrase));
@@ -256,11 +214,11 @@ public:
 	static int sizeRedirect(string phrase){
 		for(int i = 0; i < phrase.size(); ++i){
 			//skip quotes
-			if(phrase[i] == "\""){
-				i += phrase.find("\"");
+			if(phrase[i] == '\"'){
+				i += phrase.find('\"');
 			}
 
-			if(phrase[i] == "|" || phrase[i] == "<" || phrase[i] == ">"){
+			if(phrase[i] == '|' || phrase[i] == '<' || phrase[i] == '>'){
 				return i;	
 			}
 		}	
@@ -269,11 +227,11 @@ public:
 
 	static int sizePipe(string phrase){
 		for(int i = 0; i < phrase.size(); ++i){
-			if(phrase[i] == "\""){
-				i += phrase.find("\"");
+			if(phrase[i] == '\"'){
+				i += phrase.find('\"');
 			}
 
-			if(phrase[i] == "|"){
+			if(phrase[i] == '|'){
 				return i;
 			}
 		}
@@ -343,13 +301,13 @@ public:
 		return i;
 	}
 
-	static char* handleCstr(char* phrase){
-		if(size == 0) return NULL;
+	static char* handleCstr(const char* phrase){
+		if(!phrase) return NULL;
 		return newStrCpy(phrase, strlen(phrase));
 	}
 
 	// Dynamically allocates a new cstring to copy over data
-	static char* newStrCpy(char* phrase, int size)
+	static char* newStrCpy(const char* phrase, int size)
 	{
 		char* new_copy = new char[size + 1];	// plus nullspace
 		strncpy(new_copy, phrase, size);

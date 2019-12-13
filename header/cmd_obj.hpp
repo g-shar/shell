@@ -11,9 +11,6 @@
 
 #include "base_cmd.hpp"
 
-enum class en {CMD, IN, OUT, APP};
-
-
 class Cmd_Obj: public Base_Cmd {
 
 
@@ -35,7 +32,7 @@ public:
 			loc = temp.find(">");
 			loc = (loc == string::npos) ? temp.find("<") : loc;
 			file_name = new char[temp.size() - loc + 1];
-			strcpy(file_name, temp.substr(loc));
+			strcpy(file_name, temp.substr(loc).c_str());
 		}
 	}
 
@@ -58,12 +55,12 @@ public:
 
 
 	// aight i'm tired of cstrings so
-	Cmd_Obj* getCmdObj(char* phrase){
+	static Cmd_Obj* getCmdObj(char* phrase){
 		string str = string(phrase);	// Cstring turned to string
 		string cut = "";		// Substring cutting helper
 		char* temp_cstr_cmd = NULL;
-		Base_cmd* temp_cmd = NULL;
-		vector<*Cmd_Obj> list;		// Vector keeping track of cmd_objs
+		Cmd_Obj* temp_cmd = NULL;
+		vector<Cmd_Obj*> list;		// Vector keeping track of cmd_objs
 
 		// If no pipes or redirects
 		if(sizeRedirect(phrase) == string::npos){
@@ -72,7 +69,7 @@ public:
 
 		for(int i = 0; i < str.size(); ++i){
 
-			if(str[i] == "|"){
+			if(str[i] == '|'){
 				cut = str.substr(0, i);
 				str = str.substr(i + 1);
 				temp_cmd = getRedirect(cut);
@@ -86,6 +83,51 @@ public:
 
 
 		return new Cmd_Obj(temp_cstr_cmd, list[0], list);
+
+	}
+
+
+	static Cmd_Obj* getRedirect(string phrase){
+		phrase = trimWhitespace(phrase);
+		int next = sizeRedirect(phrase);
+		string right_file;
+		string left_cmd;
+		char* file = NULL;
+		char* cmd = NULL;
+
+		// if normal command object
+		if(next == string::npos){
+			char* temp = handleCstr(phrase.c_str());
+			return  new Cmd_Obj(temp);
+		}
+
+		// Turns left & right sides into cstrings
+		right_file = trimWhitespace(phrase.substr(next + 1));
+		left_cmd = trimWhitespace(phrase.substr(0, next));
+
+		if(right_file[0] == '>'){
+			right_file = right_file.substr(1);
+		}
+
+		file = handleCstr(right_file.c_str());
+		cmd = handleCstr(left_cmd.c_str());
+			
+
+		// Handles which object return
+		if(phrase[next] == '<'){
+			return new Cmd_Obj(cmd, file, en::IN);
+		}
+
+		else if(phrase[next] == '>' && phrase[next] == '>'){
+			return new Cmd_Obj(cmd, file, en::APP);
+		}
+
+		else if(phrase[next] == '>'){
+			return new Cmd_Obj(cmd, file, en::OUT);
+		}
+
+		throw "Uncaught symbol? Base_cmd getRedirect();";
+		exit(1);
 
 	}
 
@@ -256,7 +298,7 @@ private:
 
   	}
 
-	vector<cmd_obj*> list;
+	vector<Cmd_Obj*> list;
 	char* file_name;
    	char* executable;
    	char** argList;

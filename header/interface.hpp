@@ -103,7 +103,7 @@ private:
 
 			// Push new command object onto stack
 			if(checkCommand(base_commands[i])){
-				tree.push(getCmdObj(base_commands[i]));	
+				tree.push(Cmd_Obj::getCmdObj(base_commands[i]));	
 			}
 
 			// Destack base commands from stack and attach to operator before pushing onto stack again
