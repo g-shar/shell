@@ -46,6 +46,16 @@ public:
 	}
 
 
+	// Unit tests
+	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL){
+		int sz = 0;
+		while(argList[sz]!=NULL){
+			sz+=1;
+		}
+		this->size=sz;
+	}
+
+
 	~Cmd_Obj(){
 		for(int i = 0; i < size; ++i)
 		{
