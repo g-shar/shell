@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <string>
 #include <iostream>
 
@@ -162,14 +163,14 @@ public:
 			if(!list.empty())
 			{	
 				int stat;
-				int pipes[this->piping.size()-1*2];
+				int pipes[this->list.size()-1*2];
 				pipe(pipes);
 				if (fork()==0)
 				{
 					dup2(pipes[1], 1);
 					for(int i=0; i<(size-1)*2; ++i)
 					{
-						close(pipes[i];
+						close(pipes[i]);
 					}
 					Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);	//creates temp cmd_obj to ONLY run the command
 					temp->doWork();
@@ -177,14 +178,14 @@ public:
 				}
 				else
 				{
-					this->pipe_doWork(1, this->piping.size());
+					this->pipe_doWork(1, this->list.size(), pipes);
 				}
 				for(int i=0; i<size*2; ++i)
 				{
-					close
+					close(pipes[i]);
 				}
 
-				for(i=0; i<size; ++i)
+				for(int i=0; i<size; ++i)
 				{
 					waitpid(-1, &stat, 0);
 				}
@@ -195,7 +196,7 @@ public:
 				this->test_doWork();
 
 			}
-			else if(!this->type==en::CMD)
+			else if(this->type!=en::CMD)
 			{				
 				this->io_doWork();	
 			}
@@ -376,11 +377,11 @@ private:
 			exit(1);	
 	}
 
-	void pipe_doWork(int argIndex, int size)
+	void pipe_doWork(int argIndex, int size, int pipes[])
 	{
-		if(index<size)
+		if(argIndex<size)
 		{
-			pipes(pipes+(argIndex*2));
+			pipe(pipes+(argIndex*2));
 			if( fork() ==0)
 			{
 				dup2(pipes[(argIndex-1)*2], 0);
@@ -391,11 +392,11 @@ private:
 					close(pipes[i]);
 				}
 				
-				piping.at(argIndex)->doWork();
+				list.at(argIndex)->doWork();
 			}
 			else
 			{
-				pipe(argIndex+1, size);	
+				pipe_doWork(argIndex+1, size, pipes);	
 			}
 		}
 		else
@@ -407,7 +408,7 @@ private:
 				{
 					close(pipes[i]);
 				}
-				piping.at(size-1)->doWork();
+				list.at(size-1)->doWork();
 			}
 		}
 	}
