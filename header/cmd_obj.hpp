@@ -158,8 +158,7 @@ public:
 			exit(1);	
 		}
 		else if(pid==0)
-	   	{
-			
+	   	{	
 			if(!list.empty())
 			{	
 				int stat;
@@ -422,6 +421,9 @@ private:
 };
 
 #endif
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> f61c345ff0544f595345b568ec75793244ed58ca
