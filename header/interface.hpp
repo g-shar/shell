@@ -40,21 +40,7 @@ private:
 		exit(1);
 	}
 
-	// aight i'm tired of cstrings so
-	Base_Cmd* getCmdObj(char* phrase){
-		string str = string(phrase);	// Cstring turned to string
-		string cut;						// Substring cutting helper
-		vector<*Cmd_Obj> list;		// Vector keeping track of cmd_objs
 
-		for(int i = 0; i < str.size(); ++i){
-			if(str[i] == "|"){
-				cut = str.substr(0, i);
-				
-				
-			}
-		}
-
-	}
 
 	vector<char*> buildPostFix(vector<char*> base_commands){
 		vector<char*> postFixVector;
@@ -117,7 +103,7 @@ private:
 
 			// Push new command object onto stack
 			if(checkCommand(base_commands[i])){
-				tree.push(new Cmd_Obj(base_commands[i]));	
+				tree.push(getCmdObj(base_commands[i]));	
 			}
 
 			// Destack base commands from stack and attach to operator before pushing onto stack again

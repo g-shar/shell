@@ -39,25 +39,15 @@ public:
 		}
 	}
 
-	// For handling 
 
-	// Top redirector hosting vector
-	Cmd_Obj(char* cmd, en type, vector<*Cmd_Obj> list):file_name(NULL), type(type), list(list){
-		int loc = 0;
+
+	// Copy constructor just for vector
+	Cmd_Obj(char* cmd, Cmd_Obj* copy, vector<Cmd_Obj*> list):list(list), type(copy->type){
+		file_name = handleCstr(copy->file_name);
 		parse(cmd);
 
 	}
 
-	/*
-	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL), en(en::CMD){}
-		int sz=0;
-                while(argList[sz]!=NULL)
-		{
-			sz+=1;
-		}
-		this->size=sz;
-	}
-	*/
 
 	~Cmd_Obj(){
 		for(int i = 0; i < size; ++i)
@@ -65,6 +55,32 @@ public:
 			delete[] argList[i];
 		}
 	}
+
+
+	// aight i'm tired of cstrings so
+	Cmd_Obj* getCmdObj(char* phrase){
+		string str = string(phrase);	// Cstring turned to string
+		string cut;			// Substring cutting helper
+		vector<*Cmd_Obj> list;		// Vector keeping track of cmd_objs
+
+		// If no pipes or redirects
+		if(sizeRedirect(phrase) == string::npos){
+			return new Cmd_Obj(phrase);
+		}
+
+		for(int i = 0; i < str.size(); ++i){
+			if(str[i] == "|"){
+				cut = str.substr(0, i);
+				str = str.substr(i + 1);
+				
+			}
+		}
+
+
+		return new Cmd_Obj(list[0]
+
+	}
+
 
 	virtual bool doWork()
 	{	

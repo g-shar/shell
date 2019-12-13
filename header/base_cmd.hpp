@@ -194,6 +194,15 @@ public:
 	 *******************************/
 
 	static Base* getRedirect(string phrase){
+		phrase = trimWhitespace(phrase);
+		int next = sizeRedirect(phrase);
+
+		// if (
+		if(next == string::npos){
+			return  new Cmd_Obj(phrase.c_str());
+		}
+
+
 
 
 
@@ -304,6 +313,11 @@ public:
 			++i;
 		}
 		return i;
+	}
+
+	static char* handleCstr(char* phrase){
+		if(size == 0) return NULL;
+		return newStrCpy(phrase, strlen(phrase));
 	}
 
 	// Dynamically allocates a new cstring to copy over data
