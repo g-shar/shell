@@ -12,12 +12,14 @@
 #include "base_cmd.hpp"
 
 class Cmd_Obj: public Base_Cmd {
+
+
 public:
-	Cmd_Obj(char* cmd){
+	Cmd_Obj(char* cmd): file_name(NULL){
 		parse(cmd);		
 	}
 
-	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list){
+	Cmd_Obj(char* cmd, char* list[]): executable(cmd), argList(list), file_name(NULL){}
 		int sz=0;
                 while(argList[sz]!=NULL)
 		{
@@ -75,7 +77,7 @@ public:
 				}
 					
 			}
-			if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
+			else if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
 			{
 				this->test_doWork();
 
@@ -167,8 +169,10 @@ private:
 		for(int k = 0; k < size; ++k){
 			argList[k] = vList[k];
 		}
+
 		argList[size] = NULL;
 		executable = argList[0];
+
   	}
 
 	void io_doWork()
@@ -300,6 +304,7 @@ private:
 			}
 		}
 	}
+
    	char* executable;
    	char** argList;
 	int size;

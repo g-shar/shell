@@ -89,7 +89,7 @@ We also did some preliminary testing on how the connectors act in different situ
 Our parse prototype function focused mainly on being able to separate and identify the differences between commands and connectors and be able to separate them into different buckets. There were different edge cases that had to be handled, such as consecutive whitespaces or handling quotation marks. There was also minor error handling such as a single ampersand or single pipe (_which will be corrected because they are valid connectors_). Our approach uses functions to filter but eventually will migrate into classes filtering and handling errors.
 
 
-```cpp
+```
 	
 	// Parses cstring into appropriate bucket vectors prototype
 	
@@ -158,7 +158,7 @@ Our parse prototype function focused mainly on being able to separate and identi
 	cout << endl << "Connectors:" << endl << "-----" << endl;
 	printVector(connectors);
 
-```cpp
+```
 
 
 # Development and Testing Roadmap
