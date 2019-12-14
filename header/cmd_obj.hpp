@@ -38,14 +38,12 @@ public:
 		file_name = handleCstr(copy->file_name);
 		Cmd_Obj::parse(cmd);
 
-		/*
 		cout << endl << "Inside copy constructor!" << endl;
 		cout << "This is the copy!" << endl;
 		cout << "List size is: " << list.size() << endl;
 		cout << "File name is: " << file_name << endl;
 		cout << "Executable is: " << executable << endl;
 		cout << "Size is: " << size << endl;
-		*/
 	}
 
 
@@ -104,11 +102,18 @@ public:
 		list.push_back(temp_cmd);
 		
 		if(!temp_cstr_cmd){
-			temp_cstr_cmd = handleCstr(str.c_str());
+			temp_cstr_cmd = handleCstr(getLeftRedirect(str.c_str()));
 		}
 
 		return new Cmd_Obj(temp_cstr_cmd, list[0], list);
 
+	}
+
+	static char* getLeftRedirect(const char* phrase){
+		string line = trimWhitespace(string(phrase));
+		int sign = sizeRedirect(line);
+		string left_cmd = trimWhitespace(line.substr(0, sign));
+		return handleCstr(left_cmd.c_str());
 	}
 
 
@@ -141,29 +146,23 @@ public:
 
 		// Handles which object return
 		if(phrase[next] == '<'){
-			/*
 			cout << "cmd_obj.hpp INPUT OBJECT" << endl;
 			cout << "file: " << file << endl;
 			cout << "cmd: " << cmd << endl;
-			*/
 			return new Cmd_Obj(cmd, file, en::IN);
 		}
 
 		else if(phrase[next] == '>' && phrase[next] == '>'){
-			/*
 			cout << "cmd_obj.hpp APPEND OBJECT" << endl;
 			cout << "file: " << file << endl;
 			cout << "cmd: " << cmd << endl;
-			*/
 			return new Cmd_Obj(cmd, file, en::APP);
 		}
 
 		else if(phrase[next] == '>'){
-			/*
 			cout << "cmd_obj.hpp OUTPUT OBJECT" << endl;
 			cout << "file: " << file << endl;
 			cout << "cmd: " << cmd << endl;
-			*/
 			return new Cmd_Obj(cmd, file, en::OUT);
 		}
 
@@ -312,11 +311,9 @@ private:
 		argList[size] = NULL;
 		executable = argList[0];
 
-		/*
 		cout << endl << "Inside cmd_obj::parse" << endl;
 		cout << "Executable: " << executable << endl;
 		cout << "End cmd_obj::parse" << endl;
-		*/
 
   	}
 
