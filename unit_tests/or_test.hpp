@@ -25,7 +25,7 @@ TEST(OrTestSet, twoCommandSuccessTest) {
 
    Base_Cmd* andConnect= new Or(object1, object2);  
    
-   EXPECT_EQ(andConnect->doWork(), false);    //returns false since first command is succesful
+   EXPECT_EQ(andConnect->doWork(), true);    //returns false since first command is succesful
 
 }
 
@@ -43,11 +43,11 @@ TEST(OrTestSet, FirstCommandFailsTest) {
 
 
    Base_Cmd* object1= new Cmd_Obj(argList[0], argList);
-   Base_Cmd* object2= new Cmd_Obj(argList[0], argList2);
+   Base_Cmd* object2= new Cmd_Obj(argList2[0], argList2);
 
    Base_Cmd* andConnect= new Or(object1, object2);  
    
-   EXPECT_EQ(andConnect->doWork(), false);  //returns true since 1st command fails and 2nd command is executed
+   EXPECT_EQ(andConnect->doWork(), true);  //returns true since 1st command fails and 2nd command is executed
 
 }
 TEST(OrTestSet, SecondCommandFailsTest) {
@@ -69,7 +69,7 @@ TEST(OrTestSet, SecondCommandFailsTest) {
 
    Base_Cmd* andConnect= new Or(object1, object2);  
    
-   EXPECT_EQ(andConnect->doWork(), false);  //returns false since 1st command succeeds
+   EXPECT_EQ(andConnect->doWork(), true);  //returns false since 1st command succeeds
 }
 
 #endif
