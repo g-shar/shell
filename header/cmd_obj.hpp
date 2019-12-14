@@ -137,7 +137,7 @@ public:
 		char* cmd = NULL;
 
 		// if normal command object
-		if(next == string::npos){
+		if(next == phrase.size()){
 			char* temp = handleCstr(phrase.c_str());
 			return  new Cmd_Obj(temp);
 		}
