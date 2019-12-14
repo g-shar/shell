@@ -163,7 +163,7 @@ public:
 			return new Cmd_Obj(cmd, file, en::IN);
 		}
 
-		else if(phrase[next] == '>' && phrase[next] == '>'){
+		else if(phrase[next] == '>' && phrase[next+1] == '>'){
 			/*
 			cout << "cmd_obj.hpp APPEND OBJECT" << endl;
 			cout << "file: " << file << endl;
