@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "../unit_tests/io_cmd_test.hpp"
+#include "../unit_tests/pipe_cmd_test.hpp"
 //#include "../unit_tests/and_test.hpp"
 //#include "../unit_tests/cmd_obj_test.hpp"
 //#include "../unit_tests/test_cmd_test.hpp"
