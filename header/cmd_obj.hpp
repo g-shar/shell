@@ -205,9 +205,7 @@ public:
 		if(this->type!=en::CMD)
 		{
 			//cout<<"IO"<<endl;
-			//cout<<"FILENAME: "<<this->file_name<<endl;
-			//cout<<"EXECUTABLE: "<<this->executable<<endl;
-			//cout<<"ARGLIST: "<<this->argList[1]<<endl;				
+			//cout<<"FILENAME: "<<this->file_name<<endl;				
 			this->io_doWork();
 			//cout<<"io_dowork called"<<endl;
 			return true;	
@@ -351,10 +349,11 @@ private:
 
 	void io_doWork()
 	{
+		cout<<"IO_DOWORK CALLED..."<<endl;
 		if(this->type==en::IN)
 		{
-			fstream file;
-			file.open(this->file_name);
+			//fstream file;
+			//file.open(this->file_name);
 			cout<<"IN"<<endl;
 			int savestdin=dup(0);
 			int newin=open(this->file_name, O_RDONLY);
@@ -368,9 +367,8 @@ private:
 		else if(this->type==en::OUT)
 		{
 			cout<<"OUT"<<endl;
-			fstream file(this->file_name);
 			int savestdout=dup(1);
-			int newout=open(this->file_name, O_WRONLY);
+			int newout=open(this->file_name, O_WRONLY|O_EXCL);
 			dup2(newout,1);
 			close(newout);
 			this->type=en::CMD;
@@ -378,16 +376,17 @@ private:
 			dup2(savestdout, 1);
 			//execvp(this->executable, this->argList);	
 		}
-		else 
+		else if(this->type==en::APP) 
 		{
-			cout<<"APPENDOUT"<<endl;
-			int savestdout=dup(1);
-			int newout2=open(this->file_name, O_WRONLY, O_APPEND);
-			dup2(newout2, 1);	
+			cout<<"APPEND"<<endl;
+			int savestdout2=dup(1);
+			int newout2=open(this->file_name, O_WRONLY|O_CREAT|O_APPEND, 0666);
+			dup2(newout2,1);
 			close(newout2);
 			this->type=en::CMD;
-			this->doWork();	
-			dup2(savestdout, 1);
+			this->doWork();
+			dup2(savestdout2, 1);
+
 		}
 		
 	}
