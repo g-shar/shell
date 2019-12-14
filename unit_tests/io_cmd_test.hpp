@@ -1,5 +1,5 @@
-#ifndef __TEST_CMD_TEST_HPP__
-#define __TEST_CMD_TEST_HPP__
+#ifndef __IO_CMD_TEST_HPP__
+#define __IO_CMD_TEST_HPP__
 
 #include <cstring>
 #include <fstream>
