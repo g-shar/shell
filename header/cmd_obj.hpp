@@ -223,7 +223,7 @@ public:
 			{	
 				//cout<<"PIPING"<<endl;
 				int stat;
-				int pipes[this->list.size()-1*2];
+				int pipes[(this->list.size()-1)*2];
 				pipe(pipes);
 				if (fork()==0)
 				{
@@ -232,9 +232,8 @@ public:
 					{
 						close(pipes[i]);
 					}
-					Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);	//creates temp cmd_obj to ONLY run the command
-					temp->doWork();
-					delete temp;		
+					this->list.at(0)->doWork();
+					exit(0); 		
 				}
 				else
 				{
@@ -496,6 +495,7 @@ private:
 					close(pipes[i]);
 				}
 				list.at(size-1)->doWork();
+				exit(0);
 			}
 		}
 	}
