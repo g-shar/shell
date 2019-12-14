@@ -147,7 +147,7 @@ public:
 		left_cmd = trimWhitespace(phrase.substr(0, next));
 
 		if(right_file[0] == '>'){
-			right_file = right_file.substr(1);
+			right_file = trimWhitespace(right_file.substr(1));
 		}
 
 		file = handleCstr(right_file.c_str());
