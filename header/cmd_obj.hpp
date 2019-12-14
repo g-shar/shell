@@ -92,6 +92,7 @@ public:
 				str = str.substr(i + 1);
 				temp_cmd = getRedirect(cut);
 				list.push_back(temp_cmd);	
+				i = 0;
 			}
 
 
@@ -182,7 +183,7 @@ public:
 			return new Cmd_Obj(cmd, file, en::OUT);
 		}
 
-		throw "Uncaught symbol? Base_cmd getRedirect();";
+		throw "Uncaught symbol? Cmd_Obj getRedirect();";
 		exit(1);
 	}
 
