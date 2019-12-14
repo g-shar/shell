@@ -197,17 +197,19 @@ public:
 
 	virtual bool doWork()
 	{	
-	   	int status;
+		cout<<"bool doWork()"<<endl;
+	   	cout<<"executable: "<<this->executable<<endl;
+		int status;
 	   	pid_t pid;
-		// Exit catch
-	
+
+
 		cout<<"running do work..."<<endl;	
 		if(this->type!=en::CMD)
 		{
 			//cout<<"IO"<<endl;
 			//cout<<"FILENAME: "<<this->file_name<<endl;				
-			this->io_doWork();
-			return true;
+			bool result=this->io_doWork();
+			return result;
 			//cout<<"io_dowork called"<<endl;	
 		}
 		
@@ -215,52 +217,56 @@ public:
 			exit(1);	
 		}
 
-		if(!list.empty())
-		{	
-			cout<<"PIPING"<<endl;
-			cout<<"executable: "<<this->executable<<endl;
-			int stat;
-			int pipes[(this->list.size()-1)*2];
-			pid_t pid1;
-			pipe(pipes);
-			pid1=fork();
-			if (pid1==0)
-			{
-				cout<<"child of piping doWork()"<<endl;
-				dup2(pipes[1], 1);
-				for(int i=0; i<(size-1)*2; ++i)
-				{
-					close(pipes[i]);
-				}
-				this->list.at(0)->doWork();
-				exit(0); 		
-			}
-			else if(pid1==-1)
-			{
-				perror("fork");
-				exit(1);
-			}
-			else
-			{
-				this->pipe_doWork(1, this->list.size(), pipes);
-			}
-			for(int i=0; i<size*2; ++i)
-			{
-				close(pipes[i]);
-			}
-			for(int i=0; i<size; ++i)
-			{
-				cout<<"parent do work is waiting..."<<endl;
-				waitpid(-1, &stat, 0);
-			}
-					
-		}
-
-
+		
 		pid=fork();
 		if(pid==0)
 	   	{	
-			if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
+	
+			if(!list.empty())
+			{	
+				cout<<"PIPING"<<endl;
+				cout<<"executable: "<<this->executable<<endl;
+				int stat;
+				int pipes[(this->list.size()-1)*2];
+				pipe(pipes);
+				pid=fork();
+				if (pid==0)
+				{
+					cout<<"child of piping doWork()"<<endl;
+					dup2(pipes[1], 1);
+					for(int i=0; i<(size-1)*2; ++i)
+					{
+						close(pipes[i]);
+					}
+					cout<<"calling do work"<<endl;
+					this->list.at(0)->doWork();
+					cout<<"finished doing work here..."<<endl; 		
+				}
+				else if(pid==-1)
+				{
+					perror("fork");
+					exit(1);
+				}
+				else
+				{
+					cout<<"parent called"<<endl;
+					//waitpid(-1, &stat, 0);
+					this->pipe_doWork(1, this->list.size(), pipes);
+					//waitpid(-1, &stat, 0);
+				}
+
+				for(int i=0; i<size*2; ++i)
+				{
+					close(pipes[i]);
+				}
+
+				for(int i=0; i<size; ++i)
+				{
+					waitpid(-1, &stat, 0);
+				}
+				return true;	
+			}
+			else if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
 			{
 				//cout<<"TEST"<<endl;
 				this->test_doWork();
@@ -289,6 +295,7 @@ public:
 			waitpid(-1, &status, 0);
 	   	}
 
+		cout<<"THIS LINE WAS REACHED"<<endl;
 	   	if(WIFEXITED(status))
 	   	{
 		  	if(WEXITSTATUS(status)==0)
@@ -399,7 +406,7 @@ private:
 			return result;
 
 		}
-		
+		return false;	
 	}
 
 	void test_doWork()
@@ -471,30 +478,50 @@ private:
 
 	void pipe_doWork(int argIndex, int size, int pipes[])
 	{
-		cout<<"PIPEDOWORK CALLED..."<<endl;
+		cout<<"pipe_doWork CALLED..."<<endl;
 		if(argIndex<size)
 		{
-			cout<<"PIPEDOWORKLOOPING"<<endl;
-			dup2(pipes[(argIndex-1)*2], 0);
-			dup2(pipes[argIndex*2+1], 1);
-
-			for(int i=0; i<size*2; ++i)
+			int s1;
+			pid_t pid;
+			pipe(pipes+(argIndex*2));
+			pid=fork();
+			if(pid==0)
 			{
-				close(pipes[i]);
-			}
+				cout<<"pipe_doWorkLOOPING"<<endl;
+				dup2(pipes[(argIndex-1)*2], 0);
+				dup2(pipes[argIndex*2+1], 1);
+	
+				for(int i=0; i<size*2; ++i)
+				{
+					close(pipes[i]);
+				}
 				
-			list.at(argIndex)->doWork();
-			pipe_doWork(argIndex+1, size, pipes);
+				list.at(argIndex)->doWork();
+				exit(0);
+			}
+			else if(pid==-1)
+			{
+				perror("forking");
+				exit(1);
+			}
+			else
+			{
+				pipe_doWork(argIndex+1, size, pipes);
+				waitpid(-1, &s1, 0);
+				exit(0);
+			}
 				
 		}
 		else
 		{
-			dup2(pipes[(size-1)*2-2], 0);
-			for(int i=0; i<size*2; ++i)
-			{
-				close(pipes[i]);
-			}
-			list.at(size-1)->doWork();
+				cout<<"last command of pipe reached"<<endl;
+				dup2(pipes[(size-1)*2-2], 0);
+				for(int i=0; i<size*2; ++i)
+				{
+					close(pipes[i]);
+				}
+				list.at(size-1)->doWork();
+				exit(0);
 		}
 	}
 
