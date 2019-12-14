@@ -349,7 +349,7 @@ private:
 
 	void io_doWork()
 	{
-		cout<<"IO_DOWORK CALLED..."<<endl;
+		//cout<<"IO_DOWORK CALLED..."<<endl;
 		if(this->type==en::IN)
 		{
 			//fstream file;
@@ -366,9 +366,9 @@ private:
 		}
 		else if(this->type==en::OUT)
 		{
-			cout<<"OUT"<<endl;
+			//cout<<"OUT"<<endl;
 			int savestdout=dup(1);
-			int newout=open(this->file_name, O_WRONLY|O_EXCL);
+			int newout=open(this->file_name, O_WRONLY|O_CREAT|O_TRUNC, S_IRWXU);
 			dup2(newout,1);
 			close(newout);
 			this->type=en::CMD;
@@ -378,7 +378,7 @@ private:
 		}
 		else if(this->type==en::APP) 
 		{
-			cout<<"APPEND"<<endl;
+			//cout<<"APPEND"<<endl;
 			int savestdout2=dup(1);
 			int newout2=open(this->file_name, O_WRONLY|O_CREAT|O_APPEND, 0666);
 			dup2(newout2,1);
