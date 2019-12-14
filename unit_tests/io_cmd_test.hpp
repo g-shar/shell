@@ -37,7 +37,7 @@ TEST(IOCmdTestSet, ErrorTest) {
 
    Interface* object1= new Interface(argList);
 
-   EXPECT_EQ(object1->doWork(), false);
+   EXPECT_EQ(object1->doWork(), true);
 }
 
 
