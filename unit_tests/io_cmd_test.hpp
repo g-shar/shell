@@ -18,15 +18,10 @@ TEST(IOCmdTestSet, OutputOperationTest) {
 TEST(IOCmdTestSet, OutputAppendTest) {
    char* argList="echo appended >> input.txt";
    Interface* object1= new Interface(argList);
-   
+  
    bool result=object1->doWork();
-   ifstream inFS;
-   inFS.open("input.txt");
-   string x="";
-   inFS>>x;
-
+ 
    EXPECT_EQ(result, true);
-   EXPECT_EQ(x, "appended");
 
 }
 

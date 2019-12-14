@@ -205,8 +205,10 @@ public:
 		}
 		else if(pid==0)
 	   	{	
+			cout<<"CHILD"<<endl;
 			if(!list.empty())
 			{	
+				cout<<"PIPING"<<endl;
 				int stat;
 				int pipes[this->list.size()-1*2];
 				pipe(pipes);
@@ -238,15 +240,21 @@ public:
 			}
 			else if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
 			{
+				cout<<"TEST"<<endl;
 				this->test_doWork();
 
 			}
 			else if(this->type!=en::CMD)
-			{				
+			{
+				cout<<"IO"<<endl;
+				cout<<"FILENAME: "<<this->file_name<<endl;
+				cout<<"EXECUTABLE: "<<this->executable<<endl;
+				cout<<"ARGLIST: "<<this->argList[1]<<endl;				
 				this->io_doWork();	
 			}
 			else 
 			{
+				cout<<"EXECVP"<<endl;
 				//cout<<"printing commands...:"<<this->executable<<" "<<argList[1]<<endl;
 				//cout<<"execvp running..."; 
 				execvp(this->executable, this->argList);      
@@ -338,25 +346,34 @@ private:
 	{
 		if(this->type==en::IN)
 		{
-			int newin=open("filename", O_RDONLY);
+			cout<<"IN"<<endl;
+			int newin=open(this->file_name, O_RDONLY);
 			//int dupin=dup(0);
 			dup2(newin, 0);
 			close(newin);
-			execvp(this->executable, this->argList);	
+			Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);
+			temp->doWork();
+			delete temp;	
 		}
 		else if(this->type==en::OUT)
 		{
-			int newout=open("FILENAME", O_WRONLY);
+			cout<<"OUT"<<endl;
+			int newout=open(this->file_name, O_WRONLY);
 			dup2(newout,1);
 			close(newout);
-			execvp(this->executable,this->argList);
+			Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);
+			temp->doWork();
+			delete temp;	
 		}
 		else 
 		{
-			int newout2=open("FILENAME", O_WRONLY, O_APPEND);
+			cout<<"APPENDOUT"<<endl;
+			int newout2=open(this->file_name, O_WRONLY, O_APPEND);
 			dup2(newout2, 1);	
 			close(newout2);
-			execvp(this->executable, this->argList);
+			Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);
+			temp->doWork();
+			delete temp;	
 		}
 		
 	}
