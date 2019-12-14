@@ -201,56 +201,66 @@ public:
 	   	pid_t pid;
 		// Exit catch
 	
-		//cout<<"running do work..."<<endl;	
+		cout<<"running do work..."<<endl;	
 		if(this->type!=en::CMD)
 		{
 			//cout<<"IO"<<endl;
 			//cout<<"FILENAME: "<<this->file_name<<endl;				
 			this->io_doWork();
-			//cout<<"io_dowork called"<<endl;
-			return true;	
+			return true;
+			//cout<<"io_dowork called"<<endl;	
 		}
 		
 		if(std::strstr(this->executable, "exit")){
 			exit(1);	
 		}
 
-		pid=fork();
-		if(pid==0)
-	   	{	
-			//cout<<"CHILD"<<endl;
-			if(!list.empty())
-			{	
-				//cout<<"PIPING"<<endl;
-				int stat;
-				int pipes[(this->list.size()-1)*2];
-				pipe(pipes);
-				if (fork()==0)
-				{
-					dup2(pipes[1], 1);
-					for(int i=0; i<(size-1)*2; ++i)
-					{
-						close(pipes[i]);
-					}
-					this->list.at(0)->doWork();
-					exit(0); 		
-				}
-				else
-				{
-					this->pipe_doWork(1, this->list.size(), pipes);
-				}
-				for(int i=0; i<size*2; ++i)
+		if(!list.empty())
+		{	
+			cout<<"PIPING"<<endl;
+			cout<<"executable: "<<this->executable<<endl;
+			int stat;
+			int pipes[(this->list.size()-1)*2];
+			pid_t pid1;
+			pipe(pipes);
+			pid1=fork();
+			if (pid1==0)
+			{
+				cout<<"child of piping doWork()"<<endl;
+				dup2(pipes[1], 1);
+				for(int i=0; i<(size-1)*2; ++i)
 				{
 					close(pipes[i]);
 				}
-
-				for(int i=0; i<size; ++i)
-				{
-					waitpid(-1, &stat, 0);
-				}
-					
+				this->list.at(0)->doWork();
+				exit(0); 		
 			}
-			else if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
+			else if(pid1==-1)
+			{
+				perror("fork");
+				exit(1);
+			}
+			else
+			{
+				this->pipe_doWork(1, this->list.size(), pipes);
+			}
+			for(int i=0; i<size*2; ++i)
+			{
+				close(pipes[i]);
+			}
+			for(int i=0; i<size; ++i)
+			{
+				cout<<"parent do work is waiting..."<<endl;
+				waitpid(-1, &stat, 0);
+			}
+					
+		}
+
+
+		pid=fork();
+		if(pid==0)
+	   	{	
+			if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
 			{
 				//cout<<"TEST"<<endl;
 				this->test_doWork();
@@ -346,7 +356,7 @@ private:
 
   	}
 
-	void io_doWork()
+	bool io_doWork()
 	{
 		//cout<<"IO_DOWORK CALLED..."<<endl;
 		if(this->type==en::IN)
@@ -359,9 +369,9 @@ private:
 			dup2(newin, 0);
 			close(newin);
 			this->type=en::CMD;
-			this->doWork();
+			bool result=this->doWork();
 			dup2(savestdin, 0);
-			//execvp(this->executable, this->argList);
+			return result;
 		}
 		else if(this->type==en::OUT)
 		{
@@ -371,8 +381,9 @@ private:
 			dup2(newout,1);
 			close(newout);
 			this->type=en::CMD;
-			this->doWork();
+			bool result=this->doWork();
 			dup2(savestdout, 1);
+			return result;
 			//execvp(this->executable, this->argList);	
 		}
 		else if(this->type==en::APP) 
@@ -383,18 +394,13 @@ private:
 			dup2(newout2,1);
 			close(newout2);
 			this->type=en::CMD;
-			this->doWork();
+			bool result=this->doWork();
 			dup2(savestdout2, 1);
+			return result;
 
 		}
 		
 	}
-
-	void exec_doWork()
-	{
-		
-	}
-
 
 	void test_doWork()
 	{
@@ -465,38 +471,30 @@ private:
 
 	void pipe_doWork(int argIndex, int size, int pipes[])
 	{
+		cout<<"PIPEDOWORK CALLED..."<<endl;
 		if(argIndex<size)
 		{
-			pipe(pipes+(argIndex*2));
-			if( fork() ==0)
-			{
-				dup2(pipes[(argIndex-1)*2], 0);
-				dup2(pipes[argIndex*2+1], 1);
+			cout<<"PIPEDOWORKLOOPING"<<endl;
+			dup2(pipes[(argIndex-1)*2], 0);
+			dup2(pipes[argIndex*2+1], 1);
 
-				for(int i=0; i<size*2; ++i)
-				{
-					close(pipes[i]);
-				}
-				
-				list.at(argIndex)->doWork();
-			}
-			else
+			for(int i=0; i<size*2; ++i)
 			{
-				pipe_doWork(argIndex+1, size, pipes);	
+				close(pipes[i]);
 			}
+				
+			list.at(argIndex)->doWork();
+			pipe_doWork(argIndex+1, size, pipes);
+				
 		}
 		else
 		{
-			if(fork()==0)
+			dup2(pipes[(size-1)*2-2], 0);
+			for(int i=0; i<size*2; ++i)
 			{
-				dup2(pipes[(size-1)*2-2], 0);
-				for(int i=0; i<size*2; ++i)
-				{
-					close(pipes[i]);
-				}
-				list.at(size-1)->doWork();
-				exit(0);
+				close(pipes[i]);
 			}
+			list.at(size-1)->doWork();
 		}
 	}
 
