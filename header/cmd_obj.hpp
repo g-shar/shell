@@ -97,9 +97,15 @@ public:
 			}
 		}
 		
-		// closing command
-		temp_cmd = getRedirect(str);
-		list.push_back(temp_cmd);
+		// closing commands
+
+		// if there was any pipe, push last item onto vector
+		// else don't use the vector at all
+		if(str != string(phrase)){
+			temp_cmd = getRedirect(str);
+			list.push_back(temp_cmd);
+		}
+
 		
 		if(!temp_cstr_cmd){
 			temp_cstr_cmd = handleCstr(getLeftRedirect(str.c_str()));
