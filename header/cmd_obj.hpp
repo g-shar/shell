@@ -2,6 +2,7 @@
 #ifndef __CMD_OBJ_HPP__
 #define __CMD_OBJ_HPP__
 
+#include <fstream>
 #include <unistd.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -198,17 +199,31 @@ public:
 	{	
 	   	int status;
 	   	pid_t pid;
-	   	pid=fork();
 		// Exit catch
+	
+		//cout<<"running do work..."<<endl;	
+		if(this->type!=en::CMD)
+		{
+			//cout<<"IO"<<endl;
+			//cout<<"FILENAME: "<<this->file_name<<endl;
+			//cout<<"EXECUTABLE: "<<this->executable<<endl;
+			//cout<<"ARGLIST: "<<this->argList[1]<<endl;				
+			this->io_doWork();
+			//cout<<"io_dowork called"<<endl;
+			return true;	
+		}
+		
 		if(std::strstr(this->executable, "exit")){
 			exit(1);	
 		}
-		else if(pid==0)
+
+		pid=fork();
+		if(pid==0)
 	   	{	
-			cout<<"CHILD"<<endl;
+			//cout<<"CHILD"<<endl;
 			if(!list.empty())
 			{	
-				cout<<"PIPING"<<endl;
+				//cout<<"PIPING"<<endl;
 				int stat;
 				int pipes[this->list.size()-1*2];
 				pipe(pipes);
@@ -240,21 +255,13 @@ public:
 			}
 			else if(std::strstr(this->executable, "test") || this->checkTest(this->argList, this->size))
 			{
-				cout<<"TEST"<<endl;
+				//cout<<"TEST"<<endl;
 				this->test_doWork();
 
 			}
-			else if(this->type!=en::CMD)
-			{
-				cout<<"IO"<<endl;
-				cout<<"FILENAME: "<<this->file_name<<endl;
-				cout<<"EXECUTABLE: "<<this->executable<<endl;
-				cout<<"ARGLIST: "<<this->argList[1]<<endl;				
-				this->io_doWork();	
-			}
 			else 
 			{
-				cout<<"EXECVP"<<endl;
+				//cout<<"EXECVP"<<endl;
 				//cout<<"printing commands...:"<<this->executable<<" "<<argList[1]<<endl;
 				//cout<<"execvp running..."; 
 				execvp(this->executable, this->argList);      
@@ -346,37 +353,50 @@ private:
 	{
 		if(this->type==en::IN)
 		{
+			fstream file;
+			file.open(this->file_name);
 			cout<<"IN"<<endl;
+			int savestdin=dup(0);
 			int newin=open(this->file_name, O_RDONLY);
-			//int dupin=dup(0);
 			dup2(newin, 0);
 			close(newin);
-			Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);
-			temp->doWork();
-			delete temp;	
+			this->type=en::CMD;
+			this->doWork();
+			dup2(savestdin, 0);
+			//execvp(this->executable, this->argList);
 		}
 		else if(this->type==en::OUT)
 		{
 			cout<<"OUT"<<endl;
+			fstream file(this->file_name);
+			int savestdout=dup(1);
 			int newout=open(this->file_name, O_WRONLY);
 			dup2(newout,1);
 			close(newout);
-			Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);
-			temp->doWork();
-			delete temp;	
+			this->type=en::CMD;
+			this->doWork();
+			dup2(savestdout, 1);
+			//execvp(this->executable, this->argList);	
 		}
 		else 
 		{
 			cout<<"APPENDOUT"<<endl;
+			int savestdout=dup(1);
 			int newout2=open(this->file_name, O_WRONLY, O_APPEND);
 			dup2(newout2, 1);	
 			close(newout2);
-			Cmd_Obj* temp= new Cmd_Obj(this->executable, this->argList);
-			temp->doWork();
-			delete temp;	
+			this->type=en::CMD;
+			this->doWork();	
+			dup2(savestdout, 1);
 		}
 		
 	}
+
+	void exec_doWork()
+	{
+		
+	}
+
 
 	void test_doWork()
 	{
@@ -481,6 +501,7 @@ private:
 		}
 	}
 
+	
 	vector<Cmd_Obj*> list;
 	char* file_name;
    	char* executable;
