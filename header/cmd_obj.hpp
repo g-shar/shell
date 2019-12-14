@@ -197,20 +197,15 @@ public:
 
 	virtual bool doWork()
 	{	
-		cout<<"bool doWork()"<<endl;
-	   	cout<<"executable: "<<this->executable<<endl;
 		int status;
 	   	pid_t pid;
 
 
-		cout<<"running do work..."<<endl;	
+		//cout<<"running do work..."<<endl;	
 		if(this->type!=en::CMD)
-		{
-			//cout<<"IO"<<endl;
-			//cout<<"FILENAME: "<<this->file_name<<endl;				
+		{				
 			bool result=this->io_doWork();
-			return result;
-			//cout<<"io_dowork called"<<endl;	
+			return result;	
 		}
 		
 		if(std::strstr(this->executable, "exit")){
@@ -224,23 +219,23 @@ public:
 	
 			if(!list.empty())
 			{	
-				cout<<"PIPING"<<endl;
-				cout<<"executable: "<<this->executable<<endl;
+				//cout<<"PIPING"<<endl;
+				//cout<<"executable: "<<this->executable<<endl;
 				int stat;
 				int pipes[(this->list.size()-1)*2];
 				pipe(pipes);
 				pid=fork();
 				if (pid==0)
 				{
-					cout<<"child of piping doWork()"<<endl;
+					//cout<<"child of piping doWork()"<<endl;
 					dup2(pipes[1], 1);
 					for(int i=0; i<(size-1)*2; ++i)
 					{
 						close(pipes[i]);
 					}
-					cout<<"calling do work"<<endl;
+					//cout<<"calling do work"<<endl;
 					this->list.at(0)->doWork();
-					cout<<"finished doing work here..."<<endl; 		
+					//cout<<"finished doing work here..."<<endl; 		
 				}
 				else if(pid==-1)
 				{
@@ -249,10 +244,9 @@ public:
 				}
 				else
 				{
-					cout<<"parent called"<<endl;
-					//waitpid(-1, &stat, 0);
+					//cout<<"parent called"<<endl;
 					this->pipe_doWork(1, this->list.size(), pipes);
-					//waitpid(-1, &stat, 0);
+					waitpid(-1, &stat, 0);
 				}
 
 				for(int i=0; i<size*2; ++i)
@@ -295,7 +289,7 @@ public:
 			waitpid(-1, &status, 0);
 	   	}
 
-		cout<<"THIS LINE WAS REACHED"<<endl;
+		//cout<<"THIS LINE WAS REACHED"<<endl;
 	   	if(WIFEXITED(status))
 	   	{
 		  	if(WEXITSTATUS(status)==0)
@@ -478,7 +472,7 @@ private:
 
 	void pipe_doWork(int argIndex, int size, int pipes[])
 	{
-		cout<<"pipe_doWork CALLED..."<<endl;
+		//cout<<"pipe_doWork CALLED..."<<endl;
 		if(argIndex<size)
 		{
 			int s1;
@@ -487,7 +481,7 @@ private:
 			pid=fork();
 			if(pid==0)
 			{
-				cout<<"pipe_doWorkLOOPING"<<endl;
+				//cout<<"pipe_doWorkLOOPING"<<endl;
 				dup2(pipes[(argIndex-1)*2], 0);
 				dup2(pipes[argIndex*2+1], 1);
 	
@@ -514,7 +508,7 @@ private:
 		}
 		else
 		{
-				cout<<"last command of pipe reached"<<endl;
+				//cout<<"last command of pipe reached"<<endl;
 				dup2(pipes[(size-1)*2-2], 0);
 				for(int i=0; i<size*2; ++i)
 				{
