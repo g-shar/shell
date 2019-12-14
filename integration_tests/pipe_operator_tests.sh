@@ -1,11 +1,12 @@
 #!/bin/sh
 
-TESTS=( "echo hello < integration_tests.txt; cat < integration_tests.txt | tr A-Z a-z && ls -a" "eho no || ls -a | tr a-z A-Z && echo \"success\"")
+TESTS=( "echo hello > integration_tests.txt; cat < integration_tests.txt | tr a-z A-Z && ls -a" "eho no || ls -a | tr a-z A-Z && echo \"success\"")
 
 for input in "${TESTS[@]}"
 do
+   echo ""
    echo "PipingOperator Test with ${input}"
-   echo $(./rshell ${input})
+   echo $(../rshell ${input})
    EXECUTION=$?
    if [ $EXECUTION -eq 0 ];
    then
@@ -15,10 +16,9 @@ do
       exit 1
    fi
    
-   input1=$(${input})
    output=$(cat integration_tests.txt)
-   echo "system: $input1"
-   echo "rshell: $output"
+   echo "Results: "
+   echo "$output"
 done
 
 #tests primarily for piping operations
